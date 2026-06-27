@@ -1,0 +1,520 @@
+{
+  "specialMessages": [
+    {
+      "id": "edi-ipswich",
+      "label": "EDI ~ Ipswich",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-bindha",
+      "label": "EDI ~ Bindha",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-redbank",
+      "label": "EDI ~ Redbank",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-altandi",
+      "label": "EDI ~ Altandi",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-sandgate",
+      "label": "EDI ~ Sandgate",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-darra",
+      "label": "EDI ~ Darra",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-corinda",
+      "label": "EDI ~ Corinda",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-lota",
+      "label": "EDI ~ Lota",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-manly",
+      "label": "EDI ~ Manly",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-cannon-hill",
+      "label": "EDI ~ Cannon Hill",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-beenleigh",
+      "label": "EDI ~ Beenleigh",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-kingston",
+      "label": "EDI ~ Kingston",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-kuraby",
+      "label": "EDI ~ Kuraby",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-yeerongpilly",
+      "label": "EDI ~ Yeerongpilly",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-cleveland",
+      "label": "EDI ~ Cleveland",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-ferny-grove",
+      "label": "EDI ~ Ferny Grove",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-nambour",
+      "label": "EDI ~ Nambour",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-caboolture",
+      "label": "EDI ~ Caboolture",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-petrie",
+      "label": "EDI ~ Petrie",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-strathpine",
+      "label": "EDI ~ Strathpine",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-shorncliffe",
+      "label": "EDI ~ Shorncliffe",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-roma-street",
+      "label": "EDI ~ Roma Street",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-central",
+      "label": "EDI ~ Central",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-fortitude-valley",
+      "label": "EDI ~ Fortitude Valley",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-bowen-hills",
+      "label": "EDI ~ Bowen Hills",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-exhibition",
+      "label": "EDI ~ Exhibition",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-doomben",
+      "label": "EDI ~ Doomben",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-rosewood",
+      "label": "EDI ~ Rosewood",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-special",
+      "label": "EDI ~ Special",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-landsborough",
+      "label": "EDI ~ Landsborough",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-gympie-north",
+      "label": "EDI ~ Gympie North",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-banoon",
+      "label": "EDI ~ Banoon",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-northgate",
+      "label": "EDI ~ Northgate",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-test-train",
+      "label": "EDI ~ Test Train",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-freedom-train",
+      "label": "EDI ~ Freedom Train",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-out-of-service",
+      "label": "EDI ~ Out Of Service",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-park-road",
+      "label": "EDI ~ Park Road",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-blank-sign",
+      "label": "EDI ~ Blank Sign",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-coopers-plains",
+      "label": "EDI ~ Coopers Plains",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-milton",
+      "label": "EDI ~ Milton",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-suncorp-stadium",
+      "label": "EDI ~ Suncorp Stadium",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-charter",
+      "label": "EDI ~ Charter",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-sth-brisbane",
+      "label": "EDI ~ Sth Brisbane",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-springfield-ctl",
+      "label": "EDI ~ Springfield Ctl",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-varsity-lakes",
+      "label": "EDI ~ Varsity Lakes",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-queensland-rail",
+      "label": "EDI ~ Queensland Rail",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-brisbane-airport",
+      "label": "EDI ~ Brisbane Airport",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-ekka-loop",
+      "label": "EDI ~ Ekka Loop",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-santas-express",
+      "label": "EDI ~ Santa's Express",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-ausrail-charter",
+      "label": "EDI ~ AusRail Charter",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-redcliffe",
+      "label": "EDI ~ Redcliffe",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-rocklea",
+      "label": "EDI ~ Rocklea",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-eagle-junction",
+      "label": "EDI ~ Eagle Junction",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "edi-boggo-road",
+      "label": "EDI ~ Boggo Road",
+      "audioPath": "QR_PIDS_AudioFiles/Connectors/",
+      "category": "station"
+    },
+    {
+      "id": "bridge-strike",
+      "label": "Bridge Strike",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Bridge Strike.mp3",
+      "category": "incident"
+    },
+    {
+      "id": "severe-weather",
+      "label": "1 ~ Severe Weather",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Severe Weather.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "power-outage",
+      "label": "2 ~ Power Outage",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Power Outage.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "train-fault",
+      "label": "3 ~ Train Fault",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Train Fault.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "network-issue",
+      "label": "4 ~ Network Issue",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Network Issue.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "medical-emergency",
+      "label": "5 ~ Medical Emergency",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Medical Emergancy.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "emergency-services",
+      "label": "6 ~ Emergency Services",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Incident w EMS.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "safety-precaution",
+      "label": "7 ~ Safety Precaution",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Safety Issue.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "level-crossing",
+      "label": "8 ~ Level Crossing",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Incident w Vehicle at Crossing.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "person-trespass",
+      "label": "9 ~ Person Trespass",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Tresspass in Corridor.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "delay-15min",
+      "label": "10 ~ 15 minute delay",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/15 Minute Delay.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "delay-30min",
+      "label": "11 ~ 30 minutes delay",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/30 Minute Delay.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "delay-45min",
+      "label": "12 ~ 45 minutes delay",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/45 Delay.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "delay-1hour",
+      "label": "13 ~ 1 Hour delay",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/1 Hour Delay.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "safe-to-move",
+      "label": "14 ~ Safe to move",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/All Services Resumed Service.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "resolve-issue",
+      "label": "15 ~ Resolve Issue",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/TY for Patience.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "response-units",
+      "label": "16 ~ Response units",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/QR Apologises.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "qr-on-site",
+      "label": "17 ~ QR on site",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/QR Staff Onsite.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "translink",
+      "label": "18 ~ Translink",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/QR Network Disruptions.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "alternate-transport",
+      "label": "19 ~ Alternate Transport",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Alternate Transport.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "remain-on-train",
+      "label": "20 ~ Remain on Train",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Please Remain on Train.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "evacuation",
+      "label": "21 ~ Evacuation",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Track QR 02 Wet.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "terminating",
+      "label": "22 ~ Terminating",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Terminating.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "services-resumed",
+      "label": "23 ~ Services resumed",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/All Services Resumed Service.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "police-patrol",
+      "label": "Police patrol this train",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Police Patrol train (2).mp3",
+      "category": "delay"
+    },
+    {
+      "id": "cctv-surveillance",
+      "label": "CCTV Surveillance on Train",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Man CCTV.mp3",
+      "category": "special"
+    },
+    {
+      "id": "storm-season",
+      "label": "Storm Season",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Storm Season.mp3",
+      "category": "delay"
+    },
+    {
+      "id": "stabled",
+      "label": "Stabled",
+      "audioPath": "QR_PIDS_AudioFiles/TNS_Special/",
+      "category": "special"
+    },
+    {
+      "id": "pid-test-pattern",
+      "label": "PID - Test Pattern",
+      "audioPath": "QR_PIDS_AudioFiles/TNS_Special/",
+      "category": "test"
+    },
+    {
+      "id": "edi-solid-test",
+      "label": "EDI - Solid Test Pattern",
+      "audioPath": "QR_PIDS_AudioFiles/TNS_Special/",
+      "category": "test"
+    },
+    {
+      "id": "edi-50-test",
+      "label": "EDI - 50% Test Pattern",
+      "audioPath": "QR_PIDS_AudioFiles/TNS_Special/",
+      "category": "test"
+    },
+    {
+      "id": "test-sound",
+      "label": "Self Test",
+      "audioPath": "QR_PIDS_AudioFiles/Self Test.mp3",
+      "category": "test"
+    }
+  ]
+}

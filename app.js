@@ -14,18 +14,31 @@ window.addEventListener('unhandledrejection', (event) => {
 // These helpers let the app run as a normal website/PWA without Electron or localhost.
 window.QVAS_PWA_MODE = !(typeof window !== 'undefined' && typeof window.require !== 'undefined');
 
+function qvasBasePath() {
+  // GitHub Pages serves this repo under /electron15/.  Do not use ../ for root
+  // folders, because that jumps out to https://qrraillife.github.io/ and causes 404s.
+  if (window.QVAS_BASE_PATH) return window.QVAS_BASE_PATH;
+  if (window.location.protocol === 'file:') return './';
+
+  let path = window.location.pathname || '/';
+  // If the page is /electron15/index.html, use /electron15/.
+  if (!path.endsWith('/')) path = path.substring(0, path.lastIndexOf('/') + 1);
+  if (!path) path = '/';
+  window.QVAS_BASE_PATH = path;
+  return path;
+}
+
 function qvasAssetUrl(assetPath) {
   if (!assetPath) return '';
-  let normalized = String(assetPath).replace(/\\/g, '/').replace(/^\/+/, '');
+  let raw = String(assetPath).replace(/\\/g, '/').trim();
+  if (/^(https?:|blob:|data:)/i.test(raw)) return raw;
+
+  let normalized = raw.replace(/^\/+/, '');
   normalized = normalized.replace(/^\.\//, '').replace(/^\.\.\//, '');
   normalized = normalized.replace(/^audio\//i, '');
 
-  // index.html lives inside /src, but the big folders live beside /src.
-  // So QR_PIDS_AudioFiles, SEQ_GTFS and CCTV need ../ when running without localhost.
-  const rootFolders = ['QR_PIDS_AudioFiles/', 'SEQ_GTFS/', 'CCTV/'];
-  const prefix = rootFolders.some(folder => normalized.startsWith(folder)) ? '../' : './';
-
-  return prefix + normalized.split('/').map(part => encodeURIComponent(part)).join('/');
+  const encoded = normalized.split('/').map(part => encodeURIComponent(part)).join('/');
+  return qvasBasePath() + encoded;
 }
 
 function qvasCreateInlineWindowTarget(name) {
@@ -244,13 +257,13 @@ async function loadSEQGTFSFromFiles() {
       if (!response.ok) {
         // Fallback to relative path
         console.log(`   ⚠️ localhost:3000 failed, trying relative path...`);
-        response = await fetch(`../SEQ_GTFS/${file}`);
+        response = await fetch(qvasAssetUrl(`SEQ_GTFS/${file}`));
       }
       
       if (!response.ok) {
         // Try alternate path
         console.log(`   ⚠️ Relative path failed, trying ./`);
-        response = await fetch(`./SEQ_GTFS/${file}`);
+        response = await fetch(qvasAssetUrl(`SEQ_GTFS/${file}`));
       }
       
       if (!response.ok) {
@@ -2194,13 +2207,13 @@ const loadGTFSPatterns = async () => {
     const jsonCandidates = [
       '2gtfs-patterns.json',
       'gtfs-patterns.json',
-      '../2gtfs-patterns.json',
-      '../gtfs-patterns.json'
+      'src/2gtfs-patterns.json',
+      'src/gtfs-patterns.json'
     ];
 
     for (const candidate of jsonCandidates) {
       try {
-        const url = candidate.startsWith('../') ? candidate : qvasAssetUrl(candidate);
+        const url = qvasAssetUrl(candidate);
         console.log(`📄 Trying GTFS JSON: ${url}`);
         const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) {
@@ -5893,13 +5906,14 @@ document.addEventListener("DOMContentLoaded", function () {
       const image = document.getElementById(`camera-image-${i}`);
       
       if (loading && image) {
-        // Make CCTV images work from Electron, file:// testing, and iPhone/PWA hosting.
-        const cctvRootPath = (window.QVAS_PWA_MODE || window.location.protocol === 'file:') ? `../CCTV/${i}.JPG` : `CCTV/${i}.JPG`;
+        // Make CCTV images work from GitHub Pages (/electron15/), localhost, and iPhone/PWA hosting.
+        const cctvRootPath = qvasAssetUrl(`CCTV/${i}.JPG`);
         if (!image.dataset.qvasCctvFallbackReady) {
           image.dataset.qvasCctvFallbackReady = '1';
           image.addEventListener('error', () => {
-            const fallback = image.getAttribute('src') && image.getAttribute('src').startsWith('../') ? `CCTV/${i}.JPG` : `../CCTV/${i}.JPG`;
-            if (image.getAttribute('src') !== fallback) image.setAttribute('src', fallback);
+            const current = image.getAttribute('src') || '';
+            const fallback = current.includes('.JPG') ? qvasAssetUrl(`CCTV/${i}.jpg`) : qvasAssetUrl(`CCTV/${i}.JPG`);
+            if (current !== fallback) image.setAttribute('src', fallback);
           });
         }
         image.setAttribute('src', cctvRootPath);
@@ -6367,9 +6381,9 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       let response;
       try {
-        response = await fetch('./destinations.json');
+        response = await fetch(qvasAssetUrl('destinations.json'), { cache: 'no-store' });
       } catch (err) {
-        response = await fetch('../destinations.json');
+        response = await fetch(qvasAssetUrl('src/destinations.json'), { cache: 'no-store' });
       }
       
       if (response.ok) {
@@ -6401,9 +6415,9 @@ document.addEventListener("DOMContentLoaded", function () {
       // Try multiple path formats for Electron compatibility
       let response;
       try {
-        response = await fetch('./special-messages.json');
+        response = await fetch(qvasAssetUrl('special-messages.json'), { cache: 'no-store' });
       } catch (err) {
-        response = await fetch('../special-messages.json');
+        response = await fetch(qvasAssetUrl('src/special-messages.json'), { cache: 'no-store' });
       }
       
       if (response.ok) {
@@ -6725,9 +6739,9 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       let response;
       try {
-        response = await fetch('./emergency-messages.json');
+        response = await fetch(qvasAssetUrl('emergency-messages.json'), { cache: 'no-store' });
       } catch (err) {
-        response = await fetch('../emergency-messages.json');
+        response = await fetch(qvasAssetUrl('src/emergency-messages.json'), { cache: 'no-store' });
       }
       
       if (response.ok) {

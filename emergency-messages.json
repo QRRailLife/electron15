@@ -1,0 +1,129 @@
+{
+  "emergencyMessages": [
+    {
+      "id": "remain-on-train",
+      "label": "20 - Remain on Train",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Please Remain on Train.mp3"
+    },
+    {
+      "id": "evacuation",
+      "label": "21 - Evacuation",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Evacuation - No Danger.mp3"
+    },
+    {
+      "id": "evacuate-no-danger",
+      "label": "Evacuate - No Danger",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Evacuation - No Danger.mp3"
+    },
+    {
+      "id": "test-tone-100hz-18db",
+      "label": "Test Tone - 100 Hz - (-18 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 100 Hz - (-18 dB).mp3"
+    },
+    {
+      "id": "test-tone-250hz-18db",
+      "label": "Test tone - 250 Hz - (-18 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 250 Hz - (-18 dB).mp3"
+    },
+    {
+      "id": "test-tone-500hz-18db",
+      "label": "Test tone - 500 Hz - (-18 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 500 Hz - (-18 dB).mp3"
+    },
+    {
+      "id": "test-tone-1khz-18db",
+      "label": "Test tone - 1 kHz - (-18 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 1 kHz - (-18 dB).mp3"
+    },
+    {
+      "id": "test-tone-2khz-18db",
+      "label": "Test tone - 2 kHz - (-18 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 2 kHz - (-18 dB).mp3"
+    },
+    {
+      "id": "test-tone-5khz-18db",
+      "label": "Test tone - 5 kHz - (-18 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 5 kHz - (-18 dB).mp3"
+    },
+    {
+      "id": "test-tone-10khz-18db",
+      "label": "Test tone - 10 kHz - (-18 db)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 10 kHz - (-18 dB).mp3"
+    },
+    {
+      "id": "test-tone-100hz-12db",
+      "label": "Test tone - 100 Hz - (-12 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 100 Hz - (-12 dB).mp3"
+    },
+    {
+      "id": "test-tone-250hz-12db",
+      "label": "Test tone - 250 Hz - (-12 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 250 Hz - (-12 dB).mp3"
+    },
+    {
+      "id": "test-tone-500hz-12db",
+      "label": "Test tone - 500 Hz - (-12 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 500 Hz - (-12 dB).mp3"
+    },
+    {
+      "id": "test-tone-1khz-12db",
+      "label": "Test tone - 1 kHz - (-12 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 1 kHz - (-12 dB).mp3"
+    },
+    {
+      "id": "test-tone-2khz-12db",
+      "label": "Test tone - 2 kHz - (-12 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 2 kHz - (-12 dB).mp3"
+    },
+    {
+      "id": "test-tone-5khz-12db",
+      "label": "Test tone - 5 kHz - (-12 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 5 kHz - (-12 dB).mp3"
+    },
+    {
+      "id": "test-tone-10khz-12db",
+      "label": "Test tone - 10 kHz - (-12 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 10 kHz - (-12 dB).mp3"
+    },
+    {
+      "id": "test-tone-100hz-0db",
+      "label": "Test tone - 100 Hz - 0 dB",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 100 Hz - 0 dB.mp3"
+    },
+    {
+      "id": "test-tone-250hz-0db",
+      "label": "Test tone - 250 Hz - 0 dB",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 250 Hz - 0 dB.mp3"
+    },
+    {
+      "id": "test-tone-500hz-0db",
+      "label": "Test tone - 500 Hz - 0 dB",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 500 Hz - 0 dB.mp3"
+    },
+    {
+      "id": "test-tone-1khz-0db",
+      "label": "Test tone - 1 kHz - 0 dB",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 1 kHz - 0 dB.mp3"
+    },
+    {
+      "id": "test-tone-2khz-0db",
+      "label": "Test tone - 2 kHz - 0 dB",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 2 kHz - 0 dB.mp3"
+    },
+    {
+      "id": "test-tone-10khz-0db",
+      "label": "Test tone - 10 kHz - 0 dB",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Test tone - 10 kHz - 0 dB.mp3"
+    },
+    {
+      "id": "sti-test",
+      "label": "STI test",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/STI test.mp3"
+    },
+    {
+      "id": "pink-noise-12db",
+      "label": "Pink Noise - (-12 dB)",
+      "audioPath": "QR_PIDS_AudioFiles/Special Messages/Test Tone/Pink Noise - (-12 dB).mp3"
+    }
+  ]
+}
