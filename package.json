@@ -1,0 +1,40 @@
+{
+  "name": "qr-pids-announcer",
+  "version": "1.0.0",
+  "description": "Queensland Rail QR PIDS Audio Announcements System",
+  "main": "main.js",
+  "homepage": "./",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "extract-gtfs": "node extract-gtfs.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "build": {
+    "appId": "com.qrpids.announcer",
+    "productName": "QR PIDS Announcer",
+    "files": [
+      "main.js",
+      "src/**/*",
+      "audio/**/*",
+      "fonts/**/*",
+      "QR_PIDS_AudioFiles/**/*",
+      "SEQ_GTFS/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    }
+  }
+}

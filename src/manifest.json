@@ -1,0 +1,12 @@
+{
+  "name": "QVAS iPhone",
+  "short_name": "QVAS",
+  "description": "Queensland Rail QVAS iPhone/PWA version",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": []
+}

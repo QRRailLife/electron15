@@ -1,0 +1,1868 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #222;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  background: #666;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 15px;
+  font-size: 0.95em;
+}
+.header-route {
+  order: -1;
+  font-size: 0.95em;
+  font-weight: bold;
+  margin-right: 15px;
+  margin-top: -20px;
+}
+.header-title {
+  flex: 1;
+}
+.header-staff {
+  flex: 1;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+.header-staff span {
+  margin-right: 10px;
+}
+.header-route span {
+  margin-right: 10px;
+}
+.route-preview {
+  font-size: 0.85em;
+  color: #aaf;
+  font-weight: normal;
+  margin-left: 10px;
+}
+.special-message-display {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1em;
+  margin-left: 15px;
+  text-transform: uppercase;
+}
+.header-datetime {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+.header-row-2 {
+  background: #555;
+  color: #fff;
+  padding: 5px 15px;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-row-2-left {
+  display: flex;
+  align-items: center;
+}
+.header-row-2-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 260px;
+}
+.header-row-2 span {
+  margin-right: 8px;
+}
+.route-info span {
+  margin-right: 10px;
+  font-size: 1.2em;
+}
+.header-spacer {
+  margin-right: 20px;
+}
+.pid-info span {
+  margin-left: 10px;
+}
+
+/* System Ready Screen */
+.system-ready-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+  background: #000;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  position: relative;
+}
+.system-ready-text {
+  font-size: 2em;
+  margin-bottom: 30px;
+  cursor: pointer;
+  user-select: none;
+}
+.system-ready-subtext {
+  font-size: 1.5em;
+  line-height: 1.6;
+  cursor: pointer;
+  user-select: none;
+}
+.system-ready-screen.hide {
+  display: none;
+}
+
+/* Staff Number Entry Screen */
+.main-panel {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.left-panel {
+  flex: 3;
+  background: #000;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+#run-number {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  width: 120px;
+}
+#destination-override {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  width: 200px;
+}
+#set-run, #set-destination {
+  margin-bottom: 10px;
+  padding: 8px 15px;
+  font-size: 1em;
+  cursor: pointer;
+  background: #6b8c7b;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+#set-run:hover, #set-destination:hover {
+  background: #4a6655;
+}
+#error {
+  color: #ff6666;
+  margin-bottom: 10px;
+}
+#station-list-container {
+  background: #000;
+  border: none;
+  margin-top: 0;
+  flex: 1;
+  overflow-y: hidden;
+  display: none;
+  flex-direction: column;
+}
+
+#station-list-container.show {
+  display: flex;
+}
+
+/* Manual list container */
+#manual-list-container {
+  background: #000;
+  border: none;
+  margin-top: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+#manual-list-container.hide {
+  display: none;
+}
+
+.touch-keyboard.hide {
+  display: none;
+}
+
+#station-code-mode-container.hide {
+  display: none;
+}
+
+#station-code-mode-container.hide #station-code-keyboard {
+  display: none;
+}
+
+#station-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#station-list li {
+  padding: 8px 15px;
+  border-bottom: none;
+  cursor: pointer;
+  display: none;
+  justify-content: space-between;
+  color: #fff;
+  font-size: 1.1em;
+}
+#station-list li.visible {
+  display: flex;
+}
+#station-list li.selected {
+  background: #2e5b2d;
+}
+#station-list li.skipped {
+  color: #aaa;
+}
+#station-list li.skipped.selected {
+  background: #2e5b2d;
+}
+#station-list li.skipped .skip-tag {
+  color: #aaa;
+  font-style: italic;
+}
+#station-list li:hover:not(.selected) {
+  background: #333;
+}
+
+.station-more-btn {
+  color: #fff;
+  padding: 8px 15px;
+  font-size: 1.1em;
+  cursor: pointer;
+  background: #000;
+  border: none;
+}
+
+.station-more-btn:hover {
+  background: #333;
+}
+
+.station-more-btn:active {
+  background: #2e5b2d;
+}
+
+/* Manual announcements list styling */
+#manual-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#manual-list li {
+  display: none;
+  padding: 8px 15px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1em;
+  justify-content: flex-start;
+}
+#manual-list li.visible {
+  display: flex;
+}
+#manual-list li.selected {
+  background: #2e5b2d;
+}
+#manual-list li:hover:not(.selected) {
+  background: #333;
+}
+.right-panel {
+  flex: 0 0 160px;
+  background: #666;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 5px 0;
+}
+.side-btn {
+  background: #2e5b2d;
+  color: #fff;
+  border: none;
+  margin: 0.5px 5px;
+  padding: 50px 0;
+  font-size: 1.1em;
+  border-radius: 0;
+  cursor: pointer;
+  flex: 1;
+}
+.side-btn:active {
+  background: #cc0000;
+}
+.side-btn.active-press {
+  background: #cc0000 !important;
+}
+.footer {
+  background: #666;
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 0;
+  min-height: 100px;
+}
+
+.footer-btn {
+  background: #666;
+  color: #fff;
+  border: none;
+  border-right: 2px solid #444;
+  padding: 30px 30px;
+  font-size: 1em;
+  border-radius: 0;
+  cursor: pointer;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+.footer-btn:last-child {
+  border-right: none;
+}
+.footer-btn:active {
+  background: #cc0000;
+}
+.footer-btn.active-press {
+  background: #cc0000 !important;
+}
+.footer-btn.active {
+  background: #4CAF50;
+}
+.footer-btn.active:active {
+  background: #45a049;
+}
+.footer-btn#special-btn,
+.footer-btn#reset-btn,
+.footer-btn#up-btn,
+.footer-btn#down-btn,
+.footer-btn#select-btn,
+.footer-btn#station-special-btn,
+.footer-btn#station-reset-btn,
+.footer-btn#normal-up-btn,
+.footer-btn#normal-down-btn,
+.footer-btn#play-btn,
+.footer-btn#normal-special-btn,
+.footer-btn#normal-reset-btn,
+.footer-btn#startup-special-btn,
+.footer-btn#special-emergency-btn,
+.footer-btn#staff-emergency-btn {
+  background: #2e5b2d;
+}
+.footer-btn#special-btn:active,
+.footer-btn#reset-btn:active,
+.footer-btn#up-btn:active,
+.footer-btn#down-btn:active,
+.footer-btn#select-btn:active,
+.footer-btn#station-special-btn:active,
+.footer-btn#station-reset-btn:active,
+.footer-btn#normal-up-btn:active,
+.footer-btn#normal-down-btn:active,
+.footer-btn#play-btn:active,
+.footer-btn#normal-special-btn:active,
+.footer-btn#normal-reset-btn:active,
+.footer-btn#startup-special-btn:active,
+.footer-btn#special-emergency-btn:active,
+.footer-btn#staff-emergency-btn:active {
+  background: #cc0000;
+}
+.error {
+  color: #ff6666;
+  font-size: 1em;
+  margin-bottom: 10px;
+}
+
+/* Touch Keyboard Styles */
+.touch-keyboard {
+  display: flex !important;
+  flex-direction: column;
+  margin-top: 15px;
+  background: #000;
+  padding: 20px;
+  border-radius: 0;
+  border: none;
+  flex: 1;
+}
+
+.keyboard-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.key-btn {
+  background: #ffffff;
+  color: #222;
+  border: none;
+  border-radius: 12px;
+  padding: 18px 10px;
+  margin: 5px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  min-width: 58px;
+  min-height: 58px;
+}
+
+.key-btn:active {
+  background: #cc0000;
+  color: #fff;
+  border: 3px solid #ffffff;
+}
+
+.key-btn.active-press {
+  background: #cc0000 !important;
+  color: #fff;
+  border: 3px solid #ffffff !important;
+}
+
+.keyboard-control-row {
+  margin-top: 5px;
+}
+
+.key-clear, .key-backspace {
+  background: #ffcccc;
+  color: #8c4a4a;
+  flex: 1;
+  min-width: 120px;
+  padding: 14px 20px;
+}
+
+.key-clear:active, .key-backspace:active {
+  background: #cc0000;
+  color: #fff;
+}
+
+/* Day selector buttons under keyboard */
+.day-selector {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.day-btn {
+  background: #ffffff;
+  color: #000;
+  border: 2px solid #000;
+  padding: 14px 24px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+  flex: 1;
+  margin: 0 6px;
+}
+
+.day-btn:active {
+  background: #cc0000;
+  color: #fff;
+  border: 3px solid #ffffff;
+}
+
+.day-btn.selected {
+  background: #cc0000;
+  color: #fff;
+  border: 3px solid #ffffff;
+}
+
+/* Special Message Input Row */
+.special-message-row {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.special-message-row label {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+/* Station Code Keyboard Panel */
+.station-code-keyboard-panel {
+  display: flex !important;
+  flex-direction: column;
+  margin-top: 15px;
+  background: #000;
+  padding: 20px;
+  border-radius: 0;
+  border: none;
+  flex: 1;
+}
+
+/* Station Code Display Area */
+#header-station {
+  font-weight: bold;
+}
+
+#station-code-display {
+  margin-left: 10px;
+  font-size: 1.1em;
+  letter-spacing: 5px;
+}
+
+.special-message-row input {
+  flex: 1;
+  padding: 10px 15px;
+  font-size: 1em;
+  border: 2px solid #444;
+  border-radius: 6px;
+  background: #333;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.special-message-row input:focus {
+  outline: none;
+  border-color: #cc0000;
+}
+
+.special-message-row input::placeholder {
+  color: #888;
+  font-weight: normal;
+  text-transform: none;
+}
+
+.btn-clear-special {
+  background: #666;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1em;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-clear-special:hover {
+  background: #888;
+}
+
+.btn-clear-special:active {
+  background: #cc0000;
+}
+
+/* Helper bar above footer */
+.helper-bar {
+  background: #666;
+  color: #fff;
+  padding: 4px 20px;
+  margin: 0.5px 0px;
+  font-size: 0.95em;
+}
+
+/* Blank footer buttons */
+.footer-blank {
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+.footer-blank:hover {
+  background: transparent;
+}
+
+/* Hide class */
+.hide {
+  display: none !important;
+}
+
+/* Mode title (Select Start Station Mode) */
+.mode-title {
+  background: #000;
+  color: #ffff00;
+  font-size: 1.4em;
+  font-weight: bold;
+  text-align: left;
+  padding: 8px 15px;
+  margin-bottom: 0;
+  text-decoration: underline;
+}
+
+.station-title {
+  background: #000;
+  color: #ffff00;
+  padding: 8px 15px;
+  font-size: 1.4em;
+  font-weight: bold;
+  text-decoration: underline;
+  text-align: left;
+  margin: 0;
+  border-radius: 0;
+  flex-shrink: 0;
+}
+
+/* Fn Settings Panel */
+.fn-panel-container {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.fn-panel-left {
+  flex: 3;
+  background: #000;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.fn-sliders {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex: 1;
+  padding: 20px 40px;
+}
+
+.fn-slider-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+}
+
+.fn-slider-value {
+  color: #fff;
+  font-size: 1.4em;
+  margin-bottom: 15px;
+}
+
+.fn-slider-track {
+  width: 60px;
+  height: 280px;
+  background: #666;
+  position: relative;
+  border-radius: 0;
+}
+
+.fn-slider-handle {
+  position: absolute;
+  left: -20px;
+  right: -20px;
+  height: 40px;
+  background: #2e5b2d;
+  border-radius: 0;
+  cursor: grab;
+  bottom: 120px;
+}
+
+.fn-slider-handle:active {
+  cursor: grabbing;
+}
+
+.fn-slider-label {
+  color: #fff;
+  font-size: 1.1em;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.fn-audio-device-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+
+.fn-audio-device-title {
+  color: #fff;
+  font-size: 1.5em;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.audio-device-select {
+  width: 320px;
+  padding: 15px 12px;
+  margin-top: 20px;
+  background: #2e5b2d;
+  color: #fff;
+  border: 2px solid #444;
+  border-radius: 4px;
+  font-size: 1.1em;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+}
+
+.audio-device-select:hover {
+  border-color: #666;
+  background: #3a7239;
+}
+
+.audio-device-select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  background: #3a7239;
+}
+
+.system-settings-section {
+  margin-bottom: 30px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.system-settings-label {
+  color: #fff;
+  font-size: 1.1em;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.fn-toggle-btn {
+  padding: 12px 24px;
+  font-size: 1em;
+  font-weight: bold;
+  border: 2px solid #444;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: Arial, sans-serif;
+  min-width: 100px;
+}
+
+.fn-toggle-btn-green {
+  background: #4CAF50;
+  color: #fff;
+  border-color: #4CAF50;
+}
+
+.fn-toggle-btn-green:hover {
+  background: #5cb85c;
+  border-color: #5cb85c;
+}
+
+.fn-toggle-btn-grey {
+  background: #666;
+  color: #fff;
+  border-color: #666;
+}
+
+.fn-toggle-btn-grey:hover {
+  background: #777;
+  border-color: #777;
+}
+
+.audio-device-select option {
+  background: #2e5b2d;
+  color: #fff;
+  padding: 8px;
+}
+
+.fn-toggle-btn {
+  background: #2e5b2d;
+  color: #fff;
+  border: 2px solid #444;
+  padding: 12px 20px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 10px 0;
+  transition: background 0.2s;
+}
+
+.fn-toggle-btn:hover {
+  background: #3a7239;
+}
+
+.fn-toggle-btn:active {
+  background: #1e3b1d;
+}
+
+.fn-toggle-btn.enabled {
+  background: #cc0000;
+}
+
+.fn-toggle-btn.disabled {
+  background: #555;
+}
+
+.fn-closest-station-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 20px 20px;
+  border-top: 2px solid #444;
+}
+
+.fn-toggle-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.fn-toggle-label {
+  color: #fff;
+  font-size: 1.3em;
+  text-align: center;
+}
+
+.closest-station-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: 0.9em;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+/* Red Fn button in settings panel */
+.side-btn-red {
+  background: #cc0000 !important;
+}
+.side-btn-red:active {
+  background: #990000 !important;
+}
+
+/* Green side button */
+.side-btn-green {
+  background: #2e5b2d !important;
+}
+.side-btn-green:active {
+  background: #1e3b1d !important;
+}
+
+/* Grey side button */
+.side-btn-grey {
+  background: #666 !important;
+}
+.side-btn-grey:active {
+  background: #555 !important;
+}
+
+/* Green footer buttons */
+.footer-btn-green {
+  background: #2e5b2d !important;
+}
+.footer-btn-green:active {
+  background: #cc0000 !important;
+}
+
+/* Grey footer buttons */
+.footer-btn-grey {
+  background: #666 !important;
+}
+.footer-btn-grey:active {
+  background: #cc0000 !important;
+}
+
+/* Manual button visibility - hidden when no route entered, but keeps space */
+#manual-btn.hidden {
+  visibility: hidden;
+}
+
+/* CCTV button visibility - hidden during station selection mode, but keeps space */
+#cctv-btn.station-select-hidden {
+  visibility: hidden;
+}
+
+/* Skip button visibility - hidden during station selection mode, but keeps space */
+#skip-btn.station-select-hidden {
+  visibility: hidden;
+}
+
+/* Red footer buttons */
+.footer-btn-red {
+  background: #cc0000 !important;
+}
+.footer-btn-red:active {
+  background: #990000 !important;
+}
+
+/* Status and Versions Panel */
+.status-panel-container {
+  display: flex;
+  flex: 1;
+  background: #333;
+}
+
+.status-panel-left {
+  flex: 1;
+  padding: 10px;
+  overflow: auto;
+}
+
+.status-table-wrapper {
+  height: 100%;
+}
+
+.status-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95em;
+  color: #ccc;
+}
+
+.status-table td {
+  padding: 4px 8px;
+  border: 1px solid #555;
+  background: #444;
+}
+
+.status-table td.ok {
+  color: #00ff00;
+}
+
+.status-database {
+  margin-top: 20px;
+}
+
+.status-database .status-table {
+  width: auto;
+}
+
+.status-footer-label {
+  background: #333;
+  color: #fff;
+  padding: 8px 20px;
+  font-size: 1.1em;
+}
+
+/* PEI Panel */
+.pei-panel-container {
+  display: flex;
+  flex: 1;
+  background: #000;
+  min-height: 0;
+}
+
+.pei-panel-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.pei-title {
+  background: #000;
+  color: #ffff00;
+  font-size: 1.4em;
+  font-weight: bold;
+  padding: 5px 10px;
+  text-decoration: underline;
+}
+
+.pei-header-row {
+  display: flex;
+  background: #00bfff;
+  color: #000;
+  font-weight: bold;
+  padding: 8px 0;
+}
+
+.pei-col-location {
+  flex: 2;
+  text-align: center;
+}
+
+.pei-col-status {
+  flex: 1;
+  text-align: center;
+}
+
+.pei-content {
+  flex: 1;
+  background: #000;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* CCTV Panel */
+.cctv-panel-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  flex: 1;
+  background: #000;
+  min-height: 0;
+  position: relative;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.camera-box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  overflow: hidden;
+  border: 2px solid #333;
+  position: relative;
+}
+
+.camera-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.camera-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  font-size: 1.5em;
+  z-index: 10;
+}
+
+.camera-loading.hidden {
+  display: none;
+}
+
+.cctv-invisible-exit-btn {
+  position: fixed;
+  bottom: 140px;
+  left: 20px;
+  width: 150px;
+  height: 150px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+  opacity: 0;
+}
+
+.cctv-invisible-exit-btn:active {
+  opacity: 0;
+}
+
+.cctv-panel-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  min-height: 0;
+  position: relative;
+}
+
+.cctv-image-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+#cctv-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.cctv-placeholder {
+  position: absolute;
+  color: #888;
+  font-size: 1.5em;
+  display: none;
+}
+
+#cctv-image:not([src]), #cctv-image[src=""] {
+  display: none;
+}
+
+#cctv-image:not([src]) + .cctv-placeholder,
+#cctv-image[src=""] + .cctv-placeholder {
+  display: block;
+}
+
+/* Manual Mode Panel */
+.manual-panel-container {
+  display: flex;
+  flex: 1;
+  background: #000;
+  min-height: 0;
+}
+
+.manual-panel-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  min-height: 0;
+  padding: 0;
+  color: #fff;
+}
+
+.manual-title {
+  background: #000;
+  color: #ffff00;
+  padding: 8px 15px;
+  font-size: 1.4em;
+  font-weight: bold;
+  text-decoration: underline;
+  text-align: left;
+  margin: 0;
+  border-radius: 0;
+  flex-shrink: 0;
+}
+
+.manual-more-btn {
+  color: #fff;
+  padding: 8px 15px;
+  font-size: 1.1em;
+  cursor: pointer;
+  background: #000;
+  border: none;
+}
+
+.manual-more-btn:hover {
+  background: #333;
+}
+
+.manual-more-btn:active {
+  background: #2e5b2d;
+}
+
+.manual-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.manual-announcements-list {
+  flex: 1;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.manual-announcement-item {
+  background: #000;
+  color: #fff;
+  padding: 15px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  border-left: 4px solid transparent;
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+.manual-announcement-item:hover {
+  background: #1a1a1a;
+  border-left-color: #666;
+}
+
+.manual-announcement-item.selected {
+  background: #1a4d1a;
+  border-left-color: #5a9d59;
+  font-weight: bold;
+}
+
+/* Special Messages Panel */
+.special-panel-container {
+  display: flex;
+  flex: 1;
+  background: #000;
+  min-height: 0;
+}
+
+.special-panel-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  min-height: 0;
+}
+
+.special-title {
+  background: #000;
+  color: #ffff00;
+  font-size: 1.4em;
+  font-weight: bold;
+  padding: 8px 15px;
+  text-decoration: underline;
+}
+
+.special-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow-y: hidden;
+  min-height: 0;
+}
+
+.special-item {
+  color: #fff;
+  padding: 8px 15px;
+  font-size: 1.1em;
+  cursor: pointer;
+  display: none;
+}
+
+.special-item.visible {
+  display: block;
+}
+
+.special-item.selected {
+  background: #2e5b2d;
+}
+
+.special-item:hover:not(.selected) {
+  background: #333;
+}
+
+.emergency-item {
+  color: #fff;
+  padding: 8px 15px;
+  font-size: 1.1em;
+  cursor: pointer;
+  display: none;
+}
+
+.emergency-item.visible {
+  display: block;
+}
+
+.emergency-item.selected {
+  background: #2e5b2d;
+}
+
+.emergency-item:hover:not(.selected) {
+  background: #333;
+}
+
+.special-more-btn {
+  color: #fff;
+  padding: 8px 15px;
+  font-size: 1.1em;
+  cursor: pointer;
+  background: #000;
+  border: none;
+}
+
+.special-more-btn:hover {
+  background: #333;
+}
+
+.special-more-btn:active {
+  background: #2e5b2d;
+}
+
+/* Guards Working Cab Screen */
+.guards-cab-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  text-align: center;
+  color: #fff;
+  background: #1a1a1a;
+}
+.guards-cab-screen.hide {
+  display: none;
+}
+.guards-cab-header {
+  font-size: 0.9em;
+  color: #aaa;
+  margin-bottom: 20px;
+}
+.guards-cab-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.guards-cab-status {
+  font-size: 2em;
+  margin-bottom: 30px;
+}
+.guards-cab-instruction {
+  font-size: 1.5em;
+  line-height: 1.6;
+}
+
+/* CCTV PIN Entry Screen */
+.cctv-pin-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  text-align: center;
+  color: #fff;
+  background: #1a1a1a;
+}
+.cctv-pin-screen.hide {
+  display: none;
+}
+.cctv-pin-title {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+}
+.cctv-pin-label {
+  font-size: 1.2em;
+  margin-bottom: 15px;
+}
+.cctv-pin-input {
+  font-size: 2em;
+  letter-spacing: 10px;
+  margin-bottom: 30px;
+  min-height: 40px;
+  min-width: 200px;
+  border: 2px solid #666;
+  padding: 10px;
+  text-align: center;
+}
+.cctv-pin-keyboard {
+  display: flex;
+  justify-content: center;
+}
+.pin-btn {
+  width: 50px;
+  height: 50px;
+  font-size: 1.2em;
+}
+
+/* CCTV Camera Selection Screen */
+.cctv-camera-selection-screen {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: #1a1a1a;
+}
+.cctv-camera-selection-screen.hide {
+  display: none;
+}
+.cctv-selection-title {
+  font-size: 1.3em;
+  color: #fff;
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #555;
+}
+.cctv-camera-grid {
+  display: flex;
+  justify-content: space-around;
+  flex: 1;
+  padding: 15px;
+  gap: 15px;
+  overflow-y: auto;
+}
+.cctv-camera-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.cctv-group-label {
+  font-size: 1.1em;
+  color: #aaf;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+.cctv-camera-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cctv-camera-btn {
+  background: #2e5b2d;
+  color: #fff;
+  border: 2px solid #444;
+  padding: 12px 15px;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 4px;
+  min-width: 120px;
+}
+.cctv-camera-btn:hover {
+  background: #3a7239;
+  border-color: #666;
+}
+.cctv-camera-btn.selected {
+  background: #4a8c4a;
+  border-color: #fff;
+}
+
+/* CCTV Quad View Screen */
+.cctv-quad-screen {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  background: #000;
+}
+.cctv-quad-screen.hide {
+  display: none;
+}
+.quad-view-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  flex: 1;
+  gap: 10px;
+  padding: 10px;
+}
+.quad-camera {
+  background: #222;
+  border: 2px solid #555;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.quad-label {
+  color: #fff;
+  font-size: 1.1em;
+  text-align: center;
+}
+
+/* CCTV Bodyside View Screen */
+.cctv-bodyside-screen {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: #1a1a1a;
+}
+.cctv-bodyside-screen.hide {
+  display: none;
+}
+.bodyside-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 15px;
+}
+.bodyside-label {
+  color: #fff;
+  font-size: 1.1em;
+  margin-bottom: 15px;
+  text-align: center;
+}
+.bodyside-cameras {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  justify-content: center;
+}
+.bodyside-row {
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+}
+.bodyside-camera {
+  background: #333;
+  border: 2px solid #555;
+  padding: 20px;
+  color: #aaa;
+  text-align: center;
+  flex: 1;
+  max-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Route Selection Screen */
+.route-selection-screen {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: #1a1a1a;
+}
+.route-selection-screen.hide {
+  display: none;
+}
+.route-selection-title {
+  font-size: 1.5em;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+.route-selection-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  gap: 30px;
+}
+.route-input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.route-input-group label {
+  font-size: 1.3em;
+  color: #fff;
+}
+.route-input {
+  font-size: 2em;
+  padding: 10px;
+  width: 200px;
+  text-align: center;
+  border: 2px solid #666;
+  background: #222;
+  color: #fff;
+}
+
+/* Starting Station Selection Screen */
+.start-station-screen {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: #1a1a1a;
+}
+.start-station-screen.hide {
+  display: none;
+}
+.start-station-title {
+  font-size: 1.3em;
+  color: #fff;
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #555;
+}
+.start-station-info {
+  padding: 10px 15px;
+  background: #222;
+  border-bottom: 1px solid #555;
+}
+#start-station-route-info {
+  font-size: 1.1em;
+  color: #aaf;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+#start-station-mode-label {
+  font-size: 0.95em;
+  color: #aaa;
+  font-style: italic;
+}
+.start-station-list-container {
+  flex: 1;
+  overflow-y: auto;
+}
+.start-station-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.start-station-list li {
+  padding: 12px 15px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.start-station-list li:hover:not(.selected) {
+  background: #333;
+}
+.start-station-list li.selected {
+  background: #2e5b2d;
+  color: #fff;
+}
+.start-station-list li.selected::after {
+  content: '✓';
+  color: #7fff00;
+  font-weight: bold;
+  font-size: 1.3em;
+}
+
+/* Service Selection Panel */
+.service-selection-panel {
+  position: fixed;
+  top: 45px;
+  left: 0;
+  width: 65%;
+  height: calc(100% - 45px - 70px);
+  background: #000;
+  z-index: 4500;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #555;
+}
+
+.service-selection-panel.hide {
+  display: none;
+}
+
+.service-selection-header {
+  padding: 15px 15px;
+  background: #222;
+  border-bottom: 1px solid #444;
+}
+
+.service-search-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1.05em;
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.service-search-input::placeholder {
+  color: #888;
+}
+
+.service-search-input:focus {
+  outline: none;
+  border-color: #aaf;
+  background: #2a2a3a;
+  box-shadow: inset 0 0 8px rgba(170, 170, 255, 0.1);
+}
+
+.service-list-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  background: #000;
+}
+
+#service-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#service-list li {
+  padding: 12px 15px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 1.1em;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Courier New', monospace;
+}
+
+#service-list li:hover {
+  background: #333;
+}
+
+#service-list li:last-child {
+  border-bottom: none;
+}
+
+.service-route-code {
+  font-weight: bold;
+  color: #aaf;
+  margin-right: 15px;
+  min-width: 60px;
+}
+
+.service-route-name {
+  color: #ddd;
+  flex: 1;
+  font-family: Arial, sans-serif;
+}
+
+.service-selection-close {
+  padding: 12px 20px;
+  font-size: 0.95em;
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin: 10px 15px;
+  width: auto;
+  align-self: center;
+  min-width: 120px;
+  font-family: Arial, sans-serif;
+}
+
+.service-selection-close:hover {
+  background: #555;
+  border-color: #777;
+}
+
+
+
+/* iPhone / touch quick controls for the old 3, 4, 6 and 7 keyboard actions */
+.iphone-action-pad {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 9999;
+  display: grid;
+  grid-template-columns: repeat(2, 72px);
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.iphone-action-btn {
+  min-height: 54px;
+  border: 2px solid #777;
+  border-radius: 10px;
+  background: #111;
+  color: #00ff66;
+  font-family: inherit;
+  font-size: 19px;
+  font-weight: bold;
+  line-height: 1.05;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.45);
+  touch-action: manipulation;
+}
+
+.iphone-action-btn span {
+  color: #ddd;
+  font-size: 9px;
+  font-weight: normal;
+}
+
+.iphone-action-btn:active {
+  background: #003d17;
+  transform: scale(0.97);
+}
+
+@media (min-width: 900px) {
+  .iphone-action-pad {
+    opacity: 0.75;
+  }
+}
+
+
+/* iPhone fit-to-screen patch
+   This keeps the original QVAS layout and scales the whole interface on small screens. */
+html.qvas-small-screen, html.qvas-small-screen body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+
+#qvas-fit-root {
+  width: 100%;
+  height: 100vh;
+  min-height: 0;
+}
+
+html.qvas-small-screen #qvas-fit-root {
+  width: var(--qvas-design-width, 1024px);
+  height: var(--qvas-design-height, 720px);
+  transform: scale(var(--qvas-fit-scale, 1));
+  transform-origin: top left;
+  overflow: hidden;
+}
+
+html.qvas-small-screen body {
+  position: fixed;
+  inset: 0;
+}
+
+html.qvas-small-screen .header,
+html.qvas-small-screen .header-row-2,
+html.qvas-small-screen .main-panel {
+  width: var(--qvas-design-width, 1024px);
+  box-sizing: border-box;
+}
+
+html.qvas-small-screen .main-panel {
+  height: calc(var(--qvas-design-height, 720px) - 80px);
+}
+
+/* Keep the new iPhone action buttons usable after the main screen is scaled. */
+html.qvas-small-screen .iphone-action-pad {
+  position: fixed;
+  right: calc(10px / var(--qvas-fit-scale, 1));
+  bottom: calc(10px / var(--qvas-fit-scale, 1));
+}
+
+@supports (padding: max(0px)) {
+  html.qvas-small-screen body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+
+/* iPhone sound unlock button. Hidden after the first tap. */
+.qvas-audio-unlock {
+  position: fixed;
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 12000;
+  border: 2px solid #00ff66;
+  border-radius: 8px;
+  background: #000;
+  color: #00ff66;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px 18px;
+  box-shadow: 0 0 14px rgba(0, 255, 102, 0.45);
+  touch-action: manipulation;
+}
+
+.qvas-audio-unlock.hidden {
+  display: none !important;
+}
+
+html.qvas-small-screen .qvas-audio-unlock {
+  bottom: calc(max(16px, env(safe-area-inset-bottom)) / var(--qvas-fit-scale, 1));
+}

@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Mobitec 13x9';
+    src: url('Mobitec13x9.woff2') format('woff2'),
+        url('Mobitec13x9.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

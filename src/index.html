@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <title>VAS HMI-C</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="QVAS">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
+  <style>
+    /* Loading screen - shown until app.js initializes */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    #loading-screen.hidden {
+      display: none;
+    }
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .loading-text {
+      font-size: 18px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .loading-subtext {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 10px;
+    }
+    
+    /* Error screen */
+    #error-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ff4444;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+      text-align: center;
+    }
+    .error-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .error-message {
+      font-size: 14px;
+      margin: 10px 0;
+      max-width: 600px;
+    }
+  </style>
+  <script>
+    // Startup detection - prevent white screen
+    const startupTime = performance.now();
+    console.log('✅ Page startup - HEAD_LOADED');
+    
+    // Global error handler
+    window.addEventListener('error', (event) => {
+      console.error('❌ Global error:', event.error);
+      showError(`JavaScript Error: ${event.error.message}`, event.error.stack);
+    });
+    
+    window.addEventListener('unhandledrejection', (event) => {
+      console.error('❌ Unhandled rejection:', event.reason);
+      showError('Unhandled Promise Rejection', event.reason);
+    });
+    
+    function showError(title, message) {
+      const errorScreen = document.getElementById('error-screen');
+      if (errorScreen) {
+        document.querySelector('.error-title').textContent = title;
+        document.querySelector('.error-message').textContent = String(message).substring(0, 200);
+        errorScreen.style.display = 'flex';
+      }
+    }
+    
+    function hideLoadingScreen() {
+      const loadingScreen = document.getElementById('loading-screen');
+      if (loadingScreen) {
+        loadingScreen.classList.add('hidden');
+      }
+      const elapsed = (performance.now() - startupTime).toFixed(0);
+      console.log(`✅ App initialized in ${elapsed}ms`);
+    }
+    
+    // Timeout safety - if app doesn't initialize in 10 seconds, show error
+    setTimeout(() => {
+      if (!document.getElementById('loading-screen')?.classList.contains('hidden')) {
+        console.error('App startup timeout');
+        showError('Startup Timeout', 'App failed to initialize. Check console for errors.');
+      }
+    }, 10000);
+  </script>
+
+  <script>
+    // iPhone fit-to-screen helper. Keeps the exact same QVAS layout, just scales it down on small screens.
+    (function () {
+      function isQvasCoreNode(el) {
+        if (!el || el.nodeType !== 1) return false;
+        if (el.id === 'loading-screen' || el.id === 'error-screen' || el.id === 'qvas-fit-root') return false;
+        if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || el.tagName === 'LINK' || el.tagName === 'META' || el.tagName === 'TITLE') return false;
+        return true;
+      }
+
+      function ensureQvasFitRoot() {
+        let root = document.getElementById('qvas-fit-root');
+        if (root) return root;
+        root = document.createElement('div');
+        root.id = 'qvas-fit-root';
+        const children = Array.from(document.body.children).filter(isQvasCoreNode);
+        if (children.length) {
+          document.body.insertBefore(root, children[0]);
+          children.forEach(child => root.appendChild(child));
+        } else {
+          document.body.appendChild(root);
+        }
+        return root;
+      }
+
+      function fitQvasToScreen() {
+        const root = ensureQvasFitRoot();
+        const designWidth = 1024;
+        const designHeight = 720;
+        const viewportWidth = window.innerWidth || document.documentElement.clientWidth || designWidth;
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight || designHeight;
+        const scale = Math.min(viewportWidth / designWidth, viewportHeight / designHeight, 1);
+        document.documentElement.style.setProperty('--qvas-fit-scale', String(scale));
+        document.documentElement.style.setProperty('--qvas-design-width', designWidth + 'px');
+        document.documentElement.style.setProperty('--qvas-design-height', designHeight + 'px');
+        document.documentElement.classList.toggle('qvas-small-screen', viewportWidth < 900 || viewportHeight < 650);
+        root.style.setProperty('--qvas-fit-scale', String(scale));
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        ensureQvasFitRoot();
+        fitQvasToScreen();
+        setTimeout(fitQvasToScreen, 250);
+      });
+      window.addEventListener('resize', fitQvasToScreen);
+      window.addEventListener('orientationchange', () => setTimeout(fitQvasToScreen, 300));
+    })();
+  </script>
+
+</head>
+<body>
+  <!-- Loading Screen - shown until app initializes -->
+  <div id="loading-screen">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">VAS HMI-C System</div>
+    <div class="loading-subtext">Initializing...</div>
+  </div>
+  
+  <!-- Error Screen - shown if errors occur -->
+  <div id="error-screen">
+    <div class="error-title">⚠️ System Error</div>
+    <div class="error-message"></div>
+    <div style="margin-top: 20px; font-size: 12px;">Please check the console (F12) for details</div>
+  </div>
+
+  <!-- iPhone audio unlock. iOS needs one tap before announcements can play. -->
+  <button id="qvas-audio-unlock" class="qvas-audio-unlock" type="button">
+    Tap to Enable Sound
+  </button>
+
+  <script>
+    console.log('✅ BODY_STARTED: HTML Document Body Started');
+  </script>
+  <!-- Hidden input for app.js compatibility -->
+  <input type="hidden" id="run-number" maxlength="4">
+
+  <div class="header">
+    <div class="header-route hide" id="header-route">
+      <span>Route:</span>
+      <span id="run-number-display">_ _ _ _</span>
+      <span id="route-preview" class="route-preview"></span>
+      <span id="special-message-display" class="special-message-display"></span>
+    </div>
+    <div class="header-route hide" id="header-station">
+      <span>Station:</span>
+      <span id="station-code-display">_ _ _</span>
+    </div>
+    <div class="header-title" id="header-title">Internal Communication System by Bombardier, and BrisbaneRailSMU!</div>
+    <div class="header-datetime">
+      <span id="date-display"></span>
+      <span id="time-display"></span>
+    </div>
+  </div>
+  
+  <div class="header-row-2">
+    <div class="header-row-2-left">
+      <span>PID:</span>
+      <span id="pid-display"></span>
+      <span class="header-spacer"></span>
+      <span>DoorCycle:</span>
+      <span id="door-cycle-display">N</span>
+    </div>
+    <div class="header-row-2-right">
+      <span>DI:</span>
+      <span id="di-display"></span>
+    </div>
+  </div>
+
+  <div class="main-panel">
+    <div class="left-panel" id="left-panel">
+      <!-- System Initialising Screen (hidden - startup screens removed) -->
+      <div id="system-init-screen" class="system-ready-screen hide">
+        <div class="system-ready-text">System Initialising</div>
+        <div class="system-ready-subtext">Loading audio files...<br><span id="init-progress">0%</span></div>
+      </div>
+
+      <!-- System Ready Screen (hidden - startup screens removed) -->
+      <div id="system-ready-screen" class="system-ready-screen hide">
+        <div class="system-ready-text">System Ready</div>
+        <div class="system-ready-subtext">Use Buttons<br>to<br>Select Funtion</div>
+      </div>
+
+      <!-- Touch Keyboard (shown immediately) -->
+      <div id="touch-keyboard" class="touch-keyboard">
+        <div class="keyboard-row">
+          <button class="key-btn" data-key="1">1</button>
+          <button class="key-btn" data-key="2">2</button>
+          <button class="key-btn" data-key="3">3</button>
+          <button class="key-btn" data-key="4">4</button>
+          <button class="key-btn" data-key="5">5</button>
+          <button class="key-btn" data-key="6">6</button>
+          <button class="key-btn" data-key="7">7</button>
+          <button class="key-btn" data-key="8">8</button>
+          <button class="key-btn" data-key="9">9</button>
+          <button class="key-btn" data-key="0">0</button>
+        </div>
+        <div class="keyboard-row">
+          <button class="key-btn" data-key="Q">Q</button>
+          <button class="key-btn" data-key="W">W</button>
+          <button class="key-btn" data-key="E">E</button>
+          <button class="key-btn" data-key="R">R</button>
+          <button class="key-btn" data-key="T">T</button>
+          <button class="key-btn" data-key="Y">Y</button>
+          <button class="key-btn" data-key="U">U</button>
+          <button class="key-btn" data-key="I">I</button>
+          <button class="key-btn" data-key="O">O</button>
+          <button class="key-btn" data-key="P">P</button>
+        </div>
+        <div class="keyboard-row">
+          <button class="key-btn" data-key="A">A</button>
+          <button class="key-btn" data-key="S">S</button>
+          <button class="key-btn" data-key="D">D</button>
+          <button class="key-btn" data-key="F">F</button>
+          <button class="key-btn" data-key="G">G</button>
+          <button class="key-btn" data-key="H">H</button>
+          <button class="key-btn" data-key="J">J</button>
+          <button class="key-btn" data-key="K">K</button>
+          <button class="key-btn" data-key="L">L</button>
+        </div>
+        <div class="keyboard-row">
+          <button class="key-btn" data-key="Z">Z</button>
+          <button class="key-btn" data-key="X">X</button>
+          <button class="key-btn" data-key="C">C</button>
+          <button class="key-btn" data-key="V">V</button>
+          <button class="key-btn" data-key="B">B</button>
+          <button class="key-btn" data-key="N">N</button>
+          <button class="key-btn" data-key="M">M</button>
+        </div>
+
+        <!-- Day Selector Buttons -->
+        <div class="day-selector">
+          <button class="day-btn" id="mf-btn">M-F</button>
+          <button class="day-btn" id="sat-btn">SAT</button>
+          <button class="day-btn" id="sun-btn">SUN</button>
+          <button class="day-btn" id="holiday-btn">Public<br>Holiday</button>
+        </div>
+      </div>
+
+      <div id="run-error" class="error"></div>
+
+      <!-- Select Start Station Mode title (hidden initially) -->
+      <div id="mode-title" class="mode-title hide">Select Start Station Mode</div>
+
+      <!-- Station list (hidden initially) -->
+      <div id="station-list-container">
+        <div class="station-more-btn" id="station-more-prev" style="display: none;">-more-</div>
+        <ul id="station-list"></ul>
+        <div class="station-more-btn" id="station-more-next" style="display: none;">-more-</div>
+      </div>
+
+      <!-- Manual announcements list (hidden initially) -->
+      <div id="manual-list-container" class="hide">
+        <div class="manual-more-btn" id="manual-more-prev" style="display: none;">-more-</div>
+        <ul id="manual-list"></ul>
+        <div class="manual-more-btn" id="manual-more-next" style="display: none;">-more-</div>
+      </div>
+
+      <!-- Station Code Entry (hidden initially) -->
+      <div id="station-code-mode-container" class="hide">
+        <div class="mode-title">Select Closest Station</div>
+        <div id="station-code-keyboard" class="station-code-keyboard-panel">
+          <div class="keyboard-row">
+            <button class="key-btn" data-key="1">1</button>
+            <button class="key-btn" data-key="2">2</button>
+            <button class="key-btn" data-key="3">3</button>
+            <button class="key-btn" data-key="4">4</button>
+            <button class="key-btn" data-key="5">5</button>
+            <button class="key-btn" data-key="6">6</button>
+            <button class="key-btn" data-key="7">7</button>
+            <button class="key-btn" data-key="8">8</button>
+            <button class="key-btn" data-key="9">9</button>
+            <button class="key-btn" data-key="0">0</button>
+          </div>
+          <div class="keyboard-row">
+            <button class="key-btn" data-key="Q">Q</button>
+            <button class="key-btn" data-key="W">W</button>
+            <button class="key-btn" data-key="E">E</button>
+            <button class="key-btn" data-key="R">R</button>
+            <button class="key-btn" data-key="T">T</button>
+            <button class="key-btn" data-key="Y">Y</button>
+            <button class="key-btn" data-key="U">U</button>
+            <button class="key-btn" data-key="I">I</button>
+            <button class="key-btn" data-key="O">O</button>
+            <button class="key-btn" data-key="P">P</button>
+          </div>
+          <div class="keyboard-row">
+            <button class="key-btn" data-key="A">A</button>
+            <button class="key-btn" data-key="S">S</button>
+            <button class="key-btn" data-key="D">D</button>
+            <button class="key-btn" data-key="F">F</button>
+            <button class="key-btn" data-key="G">G</button>
+            <button class="key-btn" data-key="H">H</button>
+            <button class="key-btn" data-key="J">J</button>
+            <button class="key-btn" data-key="K">K</button>
+            <button class="key-btn" data-key="L">L</button>
+          </div>
+          <div class="keyboard-row">
+            <button class="key-btn" data-key="Z">Z</button>
+            <button class="key-btn" data-key="X">X</button>
+            <button class="key-btn" data-key="C">C</button>
+            <button class="key-btn" data-key="V">V</button>
+            <button class="key-btn" data-key="B">B</button>
+            <button class="key-btn" data-key="N">N</button>
+            <button class="key-btn" data-key="M">M</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-panel" id="main-right-panel">
+      <button class="side-btn side-btn-green hidden" id="manual-btn">Manual</button>
+      <button class="side-btn" id="pei-btn">PEI</button>
+      <button class="side-btn" id="cctv-btn">CCTV</button>
+      <button class="side-btn" id="fn-btn">Fn</button>
+    </div>
+
+    <!-- Fn Settings Right Panel (hidden initially) -->
+    <div class="right-panel hide" id="fn-right-panel">
+      <button class="side-btn" id="fn-status-btn">Status and<br>Versions</button>
+      <button class="side-btn" id="fn-pei-btn">PEI</button>
+      <button class="side-btn" id="fn-io-btn">I/O</button>
+      <button class="side-btn side-btn-red" id="fn-fn-btn">Fn</button>
+    </div>
+  </div>
+
+  <!-- File Explorer Panel (hidden initially) -->
+
+
+  <!-- Fn Settings Panel (hidden initially, shown in place of main-panel) -->
+  <div id="fn-panel" class="fn-panel-container hide">
+    <div class="fn-panel-left">
+      <div class="fn-sliders">
+      <div class="fn-slider-group">
+        <div class="fn-slider-value" id="brightness-value">50%</div>
+        <div class="fn-slider-track">
+          <div class="fn-slider-handle" id="brightness-handle"></div>
+        </div>
+        <div class="fn-slider-label">Screen Brightness</div>
+      </div>
+      <div class="fn-slider-group">
+        <div class="fn-slider-value" id="handset-value">50%</div>
+        <div class="fn-slider-track">
+          <div class="fn-slider-handle" id="handset-handle"></div>
+        </div>
+        <div class="fn-slider-label">Handset Volume</div>
+      </div>
+      <div class="fn-slider-group">
+        <div class="fn-slider-value" id="cabin-value">50%</div>
+        <div class="fn-slider-track">
+          <div class="fn-slider-handle" id="cabin-handle"></div>
+        </div>
+        <div class="fn-slider-label">Cab Speaker Volume</div>
+      </div>
+    </div>
+    <div class="fn-audio-device-panel hide" id="fn-audio-device-panel">
+      <div class="fn-audio-device-title">System Settings</div>
+      <div class="system-settings-section">
+        <label class="system-settings-label">Audio Output Device:</label>
+        <select id="audio-device-select" class="audio-device-select">
+          <option value="">Default Device</option>
+        </select>
+      </div>
+      <div class="system-settings-section">
+        <label class="system-settings-label">Auto CCTV on Door Unlock:</label>
+        <button id="cctv-auto-toggle" class="fn-toggle-btn">ON</button>
+      </div>
+    </div>
+    <div class="fn-closest-station-panel hide">
+      <div class="fn-toggle-group">
+        <label class="fn-toggle-label">Manual Closest Station Selection</label>
+        <button id="closest-station-toggle" class="fn-toggle-btn">OFF</button>
+        <button id="station-code-open-btn" class="fn-button" style="display:none;">Select Station</button>
+      </div>
+      <div class="fn-toggle-group">
+        <label class="fn-toggle-label">NGR Button Message Toggle</label>
+        <button id="ngr-button-message-toggle" class="fn-toggle-btn">OFF</button>
+      </div>
+    </div>
+  </div>
+  <div class="right-panel">
+    <button class="side-btn" id="fn-status-btn-2">Status and<br>Versions</button>
+    <button class="side-btn" id="fn-pei-btn-2">PEI</button>
+    <button class="side-btn" id="fn-io-btn-2">I/O</button>
+    <button class="side-btn side-btn-red" id="fn-fn-btn-2">Fn</button>
+  </div>
+</div>
+
+  <!-- Status and Versions Panel (hidden initially) -->
+  <div id="status-panel" class="status-panel-container hide">
+    <div class="status-panel-left">
+      <div class="status-table-wrapper">
+        <table class="status-table">
+          <tbody>
+            <tr><td>LDU-T</td><td class="ok">OK</td><td>V1.4</td><td>Camera DMA2</td><td class="ok">OK</td><td>V2.8</td><td>PID-DMA1</td><td class="ok">OK</td><td>V0.6</td></tr>
+            <tr><td>LDU-DMB</td><td class="ok">OK</td><td>V1.4</td><td>Camera DMA3</td><td class="ok">OK</td><td>V2.8</td><td>PID-DMA2</td><td class="ok">OK</td><td>V0.6</td></tr>
+            <tr><td>PAU-DMA</td><td class="ok">OK</td><td>V1.4</td><td>Camera DMA4</td><td class="ok">OK</td><td>V2.8</td><td>PID-T1</td><td class="ok">OK</td><td>V0.6</td></tr>
+            <tr><td>PAU-T</td><td class="ok">OK</td><td>V2.0</td><td>Camera T1</td><td class="ok">OK</td><td>V2.8</td><td>PID-T2</td><td class="ok">OK</td><td>V0.6</td></tr>
+            <tr><td>PAU-DMB</td><td class="ok">OK</td><td>V2.0</td><td>Camera T2</td><td class="ok">OK</td><td>V2.8</td><td>PID-DMB1</td><td class="ok">OK</td><td>V0.6</td></tr>
+            <tr><td>DDU-DMA</td><td class="ok">OK</td><td>V2.0</td><td>Camera T3</td><td class="ok">OK</td><td>V2.8</td><td>PID-DMB2</td><td class="ok">OK</td><td>V0.6</td></tr>
+            <tr><td>DDU-DMB</td><td class="ok">OK</td><td>V2.0</td><td>Camera T4</td><td class="ok">OK</td><td>V2.8</td><td>PEI-DMA-A</td><td class="ok">OK</td><td>V0.8</td></tr>
+            <tr><td>CCD-DMA</td><td class="ok">OK</td><td>V4.4</td><td>Camera DMB1</td><td class="ok">OK</td><td>V2.8</td><td>PEI-DMA-B</td><td class="ok">OK</td><td>V0.8</td></tr>
+            <tr><td>CCD-DMB</td><td class="ok">OK</td><td>V4.4</td><td>Camera DMB2</td><td class="ok">OK</td><td>V2.8</td><td>PEI-DMB-A</td><td class="ok">OK</td><td>V0.8</td></tr>
+            <tr><td>DACU-DMA</td><td class="ok">OK</td><td>V0.7</td><td>Camera DMB3</td><td class="ok">OK</td><td>V2.8</td><td>PEI-DMB-C</td><td class="ok">OK</td><td>V0.8</td></tr>
+            <tr><td>DACU-DMB</td><td class="ok">OK</td><td>V0.7</td><td>Camera DMB4</td><td class="ok">OK</td><td>V2.8</td><td>PEI-T-D</td><td class="ok">OK</td><td>V0.8</td></tr>
+            <tr><td>DACU-T</td><td class="ok">OK</td><td>V2.3</td><td>Camera DMA F</td><td class="ok">OK</td><td>V2.8</td><td>PEI-DMB-A</td><td class="ok">OK</td><td>V0.8</td></tr>
+            <tr><td>DACU-CAB</td><td class="ok">OK</td><td>V2.3</td><td>Camera DMB F</td><td class="ok">OK</td><td>V5.7</td><td>PEI-DMB-B</td><td class="ok">OK</td><td>V0.8</td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td>PEI-DMB-C</td><td class="ok">OK</td><td>V0.8</td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td>PEI-DMB-D</td><td class="ok">OK</td><td>V0.8</td></tr>
+          </tbody>
+        </table>
+        <div class="status-database">
+          <table class="status-table">
+            <tbody>
+              <tr><td>PIS Database</td><td>Version</td></tr>
+              <tr><td>Current</td><td>V5.47</td></tr>
+              <tr><td>Scheduled</td><td>V5.56</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="right-panel">
+      <button class="side-btn side-btn-red" id="status-status-btn">Status and<br>Versions</button>
+      <button class="side-btn" id="status-pei-btn">PEI</button>
+      <button class="side-btn" id="status-io-btn">I/O</button>
+      <button class="side-btn" id="status-fn-btn">Fn</button>
+    </div>
+  </div>
+QVAS 13.2 DEVELOPMENT BUILD 03d478d1E2 - COMPILED 12/05/2026
+  <!-- Status Footer (hidden initially) -->
+  <div class="status-footer-label hide" id="status-footer-label">System Status and Version Information</div>
+  <div class="footer hide" id="status-footer">
+    <button class="footer-btn footer-btn-red" id="smu-set-btn">SMU_260<br>Set</button>
+    <button class="footer-btn" id="set2-btn">Set2</button>
+    <button class="footer-btn" id="set3-btn">Set3</button>
+    <button class="footer-btn" id="set4-btn">Set4</button>
+    <button class="footer-btn" id="set5-btn">Set5</button>
+    <button class="footer-btn footer-btn-green" id="status-exit-btn">Exit</button>
+  </div>
+
+  <!-- PEI Panel (hidden initially) -->
+  <div id="pei-panel" class="pei-panel-container hide">
+    <div class="pei-panel-left">
+      <div class="pei-title">Passenger Events</div>
+      <div class="pei-header-row">
+        <span class="pei-col-location">Location.</span>
+        <span class="pei-col-status">Status</span>
+      </div>
+      <div class="pei-content">
+        <!-- Event rows would go here -->
+      </div>
+    </div>
+    <div class="right-panel">
+      <button class="side-btn side-btn-red" id="pei-pei-btn">PEI</button>
+      <button class="side-btn" id="pei-io-btn">I/O</button>
+      <button class="side-btn" id="pei-fn-btn">Fn</button>
+    </div>
+  </div>
+
+  <!-- PEI Footer (hidden initially) -->
+  <div class="footer hide" id="pei-footer">
+    <button class="footer-btn" id="pei-up-btn">Up</button>
+    <button class="footer-btn" id="pei-down-btn">Down</button>
+    <button class="footer-btn" id="pei-select-btn">Select</button>
+    <button class="footer-btn" id="pei-hold-btn">Hold</button>
+    <button class="footer-btn" id="pei-reset-event-btn">Reset<br>Event</button>
+    <button class="footer-btn footer-btn-green" id="pei-exit-btn">Exit</button>
+  </div>
+
+  <!-- CCTV Panel (hidden initially) -->
+  <div id="cctv-panel" class="cctv-panel-container hide">
+    <div class="camera-box">
+      <div class="camera-loading" id="camera-loading-1">Video Requested...</div>
+      <img class="camera-image" id="camera-image-1" src="../CCTV/1.JPG" onerror="this.onerror=null;this.src='CCTV/1.JPG';" alt="Camera 1">
+    </div>
+    <div class="camera-box">
+      <div class="camera-loading" id="camera-loading-2">Video Requested...</div>
+      <img class="camera-image" id="camera-image-2" src="../CCTV/2.JPG" onerror="this.onerror=null;this.src='CCTV/2.JPG';" alt="Camera 2">
+    </div>
+    <div class="camera-box">
+      <div class="camera-loading" id="camera-loading-3">Video Requested...</div>
+      <img class="camera-image" id="camera-image-3" src="../CCTV/3.JPG" onerror="this.onerror=null;this.src='CCTV/3.JPG';" alt="Camera 3">
+    </div>
+    <div class="camera-box">
+      <div class="camera-loading" id="camera-loading-4">Video Requested...</div>
+      <img class="camera-image" id="camera-image-4" src="../CCTV/4.JPG" onerror="this.onerror=null;this.src='CCTV/4.JPG';" alt="Camera 4">
+    </div>
+    <!-- Invisible exit button in bottom left corner -->
+    <button id="cctv-exit-btn" class="cctv-invisible-exit-btn"></button>
+  </div>
+
+  <!-- Special Messages Panel (hidden initially) -->
+  <div id="special-panel" class="special-panel-container hide">
+    <div class="special-panel-left">
+      <div class="special-title">Special Messages</div>
+      <div class="special-more-btn" id="special-more-prev" style="display: none;">-more-</div>
+      <div class="special-list">
+        <div class="special-item selected" data-message="edi-ipswich">EDI ~ Ipswich</div>
+        <div class="special-item" data-message="edi-bindha">EDI ~ Bindha</div>
+        <div class="special-item" data-message="edi-redbank">EDI ~ Redbank</div>
+        <div class="special-item" data-message="edi-altandi">EDI ~ Altandi</div>
+        <div class="special-item" data-message="edi-sandgate">EDI ~ Sandgate</div>
+        <div class="special-item" data-message="edi-darra">EDI ~ Darra</div>
+        <div class="special-item" data-message="edi-corinda">EDI ~ Corinda</div>
+        <div class="special-item" data-message="edi-lota">EDI ~ Lota</div>
+        <div class="special-item" data-message="edi-manly">EDI ~ Manly</div>
+        <div class="special-item" data-message="edi-cannon-hill">EDI ~ Cannon Hill</div>
+        <div class="special-item" data-message="edi-beenleigh">EDI ~ Beenleigh</div>
+        <div class="special-item" data-message="edi-kingston">EDI ~ Kingston</div>
+        <div class="special-item" data-message="edi-kuraby">EDI ~ Kuraby</div>
+        <div class="special-item" data-message="edi-yeerongpilly">EDI ~ Yeerongpilly</div>
+        <div class="special-item" data-message="edi-cleveland">EDI ~ Cleveland</div>
+        <div class="special-item" data-message="edi-ferny-grove">EDI ~ Ferny Grove</div>
+        <div class="special-item" data-message="edi-nambour">EDI ~ Nambour</div>
+        <div class="special-item" data-message="edi-caboolture">EDI ~ Caboolture</div>
+        <div class="special-item" data-message="edi-petrie">EDI ~ Petrie</div>
+        <div class="special-item" data-message="edi-strathpine">EDI ~ Strathpine</div>
+        <div class="special-item" data-message="edi-shorncliffe">EDI ~ Shorncliffe</div>
+        <div class="special-item" data-message="edi-roma-street">EDI ~ Roma Street</div>
+        <div class="special-item" data-message="edi-central">EDI ~ Central</div>
+        <div class="special-item" data-message="edi-fortitude-valley">EDI ~ Fortitude Valley</div>
+        <div class="special-item" data-message="edi-bowen-hills">EDI ~ Bowen Hills</div>
+        <div class="special-item" data-message="edi-exhibition">EDI ~ Exhibition</div>
+        <div class="special-item" data-message="edi-doomben">EDI ~ Doomben</div>
+        <div class="special-item" data-message="edi-rosewood">EDI ~ Rosewood</div>
+        <div class="special-item" data-message="edi-special">EDI ~ Special</div>
+        <div class="special-item" data-message="edi-landsborough">EDI ~ Landsborough</div>
+        <div class="special-item" data-message="edi-gympie-north">EDI ~ Gympie North</div>
+        <div class="special-item" data-message="edi-banoon">EDI ~ Banoon</div>
+        <div class="special-item" data-message="edi-northgate">EDI ~ Northgate</div>
+        <div class="special-item" data-message="edi-test-train">EDI ~ Test Train</div>
+        <div class="special-item" data-message="edi-freedom-train">EDI ~ Freedom Train</div>
+
+        <div class="special-item" data-message="edi-out-of-service">EDI ~ Out Of Service</div>
+        <div class="special-item" data-message="edi-park-road">EDI ~ Park Road</div>
+        <div class="special-item" data-message="edi-blank-sign">EDI ~ Blank Sign</div>
+        <div class="special-item" data-message="edi-coopers-plains">EDI ~ Coopers Plains</div>
+        <div class="special-item" data-message="edi-milton">EDI ~ Milton</div>
+        <div class="special-item" data-message="edi-suncorp-stadium">EDI ~ Suncorp Stadium</div>
+        <div class="special-item" data-message="edi-charter">EDI ~ Charter</div>
+        <div class="special-item" data-message="edi-sth-brisbane">EDI ~ Sth Brisbane</div>
+        <div class="special-item" data-message="edi-springfield-ctl">EDI ~ Springfield Ctl</div>
+        <div class="special-item" data-message="edi-varsity-lakes">EDI ~ Varsity Lakes</div>
+        <div class="special-item" data-message="edi-queensland-rail">EDI ~ Queensland Rail</div>
+        <div class="special-item" data-message="edi-brisbane-airport">EDI ~ Brisbane Airport</div>
+        <div class="special-item" data-message="edi-ekka-loop">EDI ~ Ekka Loop</div>
+        <div class="special-item" data-message="edi-santas-express">EDI ~ Santa's Express</div>
+        <div class="special-item" data-message="edi-ausrail-charter">EDI ~ AusRail Charter</div>
+        <div class="special-item" data-message="edi-redcliffe">EDI ~ Redcliffe</div>
+        <div class="special-item" data-message="edi-rocklea">EDI ~ Rocklea</div>
+        <div class="special-item" data-message="edi-eagle-junction">EDI ~ Eagle Junction</div>
+        <div class="special-item" data-message="edi-boggo-road">EDI ~ Boggo Road</div>
+        <div class="special-item" data-message="bridge-strike">Bridge Strike</div>
+        <div class="special-item" data-message="severe-weather">1 ~ Severe Weather</div>
+        <div class="special-item" data-message="power-outage">2 ~ Power Outage</div>
+        <div class="special-item" data-message="train-fault">3 ~ Train Fault</div>
+        <div class="special-item" data-message="network-issue">4 ~ Network Issue</div>
+        <div class="special-item" data-message="medical-emergency">5 ~ Medical Emergency</div>
+        <div class="special-item" data-message="emergency-services">6 ~ Emergency Services</div>
+        <div class="special-item" data-message="safety-precaution">7 ~ Safety Precaution</div>
+        <div class="special-item" data-message="level-crossing">8 ~ Level Crossing</div>
+        <div class="special-item" data-message="person-trespass">9 ~ Person Trespass</div>
+        <div class="special-item" data-message="delay-15min">10 ~ 15 minute delay</div>
+        <div class="special-item" data-message="delay-30min">11 ~ 30 minutes delay</div>
+        <div class="special-item" data-message="delay-45min">12 ~ 45 minutes delay</div>
+        <div class="special-item" data-message="delay-1hour">13 ~ 1 Hour delay</div>
+        <div class="special-item" data-message="safe-to-move">14 ~ Safe to move</div>
+        <div class="special-item" data-message="resolve-issue">15 ~ Resolve Issue</div>
+        <div class="special-item" data-message="response-units">16 ~ Response units</div>
+        <div class="special-item" data-message="qr-on-site">17 ~ QR on site</div>
+        <div class="special-item" data-message="translink">18 ~ Translink</div>
+        <div class="special-item" data-message="alternate-transport">19 ~ Alternate Transport</div>
+        <div class="special-item" data-message="remain-on-train">20 ~ Remain on Train</div>
+        <div class="special-item" data-message="evacuation">21 ~ Evacuation</div>
+        <div class="special-item" data-message="terminating">22 ~ Terminating</div>
+        <div class="special-item" data-message="services-resumed">23 ~ Services resumed</div>
+        <div class="special-item" data-message="police-patrol">Police patrol this train</div>
+        <div class="special-item" data-message="cctv-surveillance">CCTV Surveillance on Train</div>
+        <div class="special-item" data-message="storm-season">Storm Season</div>
+        <div class="special-item" data-message="stabled">Stabled</div>
+        <div class="special-item" data-message="pid-test-pattern">PID - Test Pattern</div>
+        <div class="special-item" data-message="edi-solid-test">EDI - Solid Test Pattern</div>
+        <div class="special-item" data-message="edi-50-test">EDI - 50% Test Pattern</div>
+        <div class="special-item" data-message="test-sound">Self Test</div>
+      </div>
+      <div class="special-more-btn" id="special-more-next" style="display: none;">-more-</div>
+    </div>
+    <div class="right-panel">
+      <button class="side-btn" id="special-skip-btn">Skip</button>
+      <button class="side-btn" id="special-pei-btn">PEI</button>
+      <button class="side-btn" id="special-cctv-btn">CCTV</button>
+      <button class="side-btn" id="special-fn-btn">Fn</button>
+    </div>
+  </div>
+
+  <!-- Emergency Messages Panel (hidden initially) -->
+  <div id="emergency-panel" class="special-panel-container hide">
+    <div class="special-panel-left">
+      <div class="special-title" style="color: #ffff00;">Emergency Messages</div>
+      <div class="special-more-btn" id="emergency-more-prev" style="display: none;">-more-</div>
+      <div class="emergency-list">
+        <!-- Populated by JavaScript -->
+      </div>
+      <div class="special-more-btn" id="emergency-more-next" style="display: none;">-more-</div>
+    </div>
+    <div class="right-panel">
+      <button class="side-btn" id="emergency-skip-btn">Skip</button>
+      <button class="side-btn" id="emergency-pei-btn">PEI</button>
+      <button class="side-btn" id="emergency-cctv-btn">CCTV</button>
+      <button class="side-btn" id="emergency-fn-btn">Fn</button>
+    </div>
+  </div>
+
+  <!-- Helper text bar -->
+  <div class="helper-bar" id="helper-bar"></div>
+  <div class="iphone-action-pad" id="iphone-action-pad" aria-label="iPhone quick controls">
+    <button class="iphone-action-btn" id="iphone-action-3" type="button">3<br><span>Doors Open / CCTV</span></button>
+    <button class="iphone-action-btn" id="iphone-action-4" type="button">4<br><span>Arrive</span></button>
+    <button class="iphone-action-btn" id="iphone-action-6" type="button">6<br><span>Doors Close</span></button>
+    <button class="iphone-action-btn" id="iphone-action-7" type="button">7<br><span>Next Stn</span></button>
+  </div>
+
+  <!-- Emergency Messages Footer (hidden initially) -->
+  <div class="footer hide" id="emergency-footer">
+    <button class="footer-btn footer-btn-green" id="emergency-up-btn">Up</button>
+    <button class="footer-btn footer-btn-green" id="emergency-down-btn">Down</button>
+    <button class="footer-btn footer-btn-green" id="emergency-play-btn">Select</button>
+    <button class="footer-btn footer-btn-grey" id="emergency-special-btn"></button>
+    <button class="footer-btn footer-btn-green" id="emergency-reset-btn">Exit</button>
+  </div>
+
+  <!-- Special Messages Footer (hidden initially) -->
+  <div class="footer hide" id="special-footer">
+    <button class="footer-btn footer-btn-green" id="special-up-btn">Up</button>
+    <button class="footer-btn footer-btn-green" id="special-down-btn">Down</button>
+    <button class="footer-btn footer-btn-green" id="special-play-btn">Play</button>
+    <button class="footer-btn" id="special-stop-btn">Stop</button>
+    <button class="footer-btn" id="special-emergency-btn">Emergency</button>
+    <button class="footer-btn footer-btn-green" id="special-reset-btn">Exit</button>
+  </div>
+
+
+  <!-- Initial Footer (shown on system ready screen) -->
+  <div class="footer" id="initial-footer">
+    <button class="footer-btn footer-blank"></button>
+    <button class="footer-btn footer-blank"></button>
+    <button class="footer-btn footer-blank"></button>
+    <button class="footer-btn" id="stop-btn">Stop</button>
+    <button class="footer-btn" id="special-btn">Special/<br>Emergcy</button>
+    <button class="footer-btn footer-blank"></button>
+  </div>
+
+  <!-- Staff Number Footer (shown when staff number screen is visible) -->
+  <div class="footer hide" id="staff-footer">
+    <button class="footer-btn" id="staff-back-btn">Back</button>
+    <button class="footer-btn footer-blank"></button>
+    <button class="footer-btn" id="staff-skip-btn">Skip</button>
+    <button class="footer-btn" id="staff-enter-btn">Enter</button>
+    <button class="footer-btn" id="staff-emergency-btn">Special/Emergency</button>
+    <button class="footer-btn footer-btn-green" id="staff-reset-btn">Reset</button>
+  </div>
+
+  <!-- Startup Footer (shown when keyboard visible) -->
+  <div class="footer hide" id="startup-footer">
+    <button class="footer-btn" id="back-btn">Back</button>
+    <button class="footer-btn footer-blank"></button>
+    <button class="footer-btn" id="enter-btn">Enter</button>
+    <button class="footer-btn" id="startup-stop-btn">Stop</button>
+    <button class="footer-btn" id="startup-special-btn">Special/<br>Emergancy</button>
+    <button class="footer-btn" id="reset-btn">Reset</button>
+  </div>
+
+  <!-- Station Selection Footer (hidden initially) -->
+  <div class="footer hide" id="station-footer">
+    <button class="footer-btn" id="up-btn">Up</button>
+    <button class="footer-btn" id="down-btn">Down</button>
+    <button class="footer-btn footer-blank"></button>
+    <button class="footer-btn" id="select-btn">Select</button>
+    <button class="footer-btn" id="station-stop-btn">Stop</button>
+    <button class="footer-btn" id="station-special-btn">Special/<br>Emergancy</button>
+    <button class="footer-btn" id="station-reset-btn">Reset</button>
+  </div>
+
+  <!-- Normal Mode Footer (hidden initially) -->
+  <div class="footer hide" id="normal-footer">
+    <button class="footer-btn" id="normal-up-btn">Up</button>
+    <button class="footer-btn" id="normal-down-btn">Down</button>
+    <button class="footer-btn" id="skip-btn">Skip</button>
+    <button class="footer-btn" id="play-btn">Play</button>
+    <button class="footer-btn" id="normal-stop-btn">Stop</button>
+    <button class="footer-btn" id="normal-special-btn">Special/<br>Emergancy</button>
+    <button class="footer-btn" id="normal-reset-btn">Reset</button>
+  </div>
+
+  <!-- Fn Settings Footer (hidden initially) -->
+  <div class="footer hide" id="fn-footer">
+    <button class="footer-btn footer-btn-green" id="brightness-down-btn">Brightness<br>Down</button>
+    <button class="footer-btn footer-btn-green" id="brightness-up-btn">Brightness<br>Up</button>
+    <button class="footer-btn footer-btn-green" id="audio-device-btn">System<br>Settings</button>
+    <button class="footer-btn footer-btn-green" id="cabin-up-btn">Cabin<br>Volume Up</button>
+    <button class="footer-btn footer-btn-green" id="cabin-down-btn">Cabin<br>Volume Down</button>
+    <button class="footer-btn footer-btn-green" id="fn-exit-btn">Exit</button>
+  </div>
+
+  <!-- Reset Confirmation Footer (hidden initially) -->
+  <div class="footer hide" id="reset-confirm-footer">
+    <button class="footer-btn footer-blank"></button>
+    <button class="footer-btn footer-blank"></button>
+    <button class="footer-btn footer-blank"></button>
+    <button class="footer-btn footer-blank"></button>
+    <button class="footer-btn" id="reset-no-btn">No</button>
+    <button class="footer-btn footer-btn-green" id="reset-yes-btn">Yes</button>
+  </div>
+
+  <script>
+    // ==================== REMOTE DEVICE DETECTION & STATE POLLING ====================
+    const isRemoteDevice = false; // iPhone/PWA mode: run locally, no /api/state polling
+    
+    console.log(`🔍 [INIT] isRemoteDevice=${isRemoteDevice}, typeof require=${typeof require}, window.electronApp=${window.electronApp}`);
+    
+    if (isRemoteDevice) {
+      console.log('🌐 [INIT] Running as remote device - enabling state polling');
+      
+      let statePolling = null;
+      let lastAudioPath = null;
+      
+      // Start polling for state updates from the server
+      function startStatePolling() {
+        let lastKeyPressTimestamp = null;
+        
+        statePolling = setInterval(async () => {
+          try {
+            const response = await fetch('/api/state');
+            if (response.ok) {
+              const state = await response.json();
+              
+              // Update door cycle indicator
+              const doorCycleDisplay = document.getElementById('door-cycle-display');
+              if (doorCycleDisplay) {
+                doorCycleDisplay.textContent = state.doorCycle || 'N';
+              }
+              
+              // Update route display with spacing
+              const routeDisplay = document.getElementById('run-number-display');
+              if (routeDisplay && state.route) {
+                routeDisplay.textContent = state.route.split('').join(' ');
+              }
+              
+              // Update PID (station) display
+              const pidDisplay = document.getElementById('pid-display');
+              if (pidDisplay && state.station) {
+                pidDisplay.textContent = state.station;
+              }
+              
+              // Update DI display
+              const diDisplay = document.getElementById('di-display');
+              if (diDisplay && state.DI) {
+                diDisplay.textContent = state.DI;
+              }
+              
+              // Sync input value if not currently typing
+              const runNumberInput = document.getElementById('run-number');
+              if (runNumberInput && state.inputValue && !runNumberInput.matches(':focus')) {
+                runNumberInput.value = state.inputValue;
+              }
+              
+              // Handle key press from global listener
+              if (state.lastKeyPress && state.lastKeyPress.timestamp !== lastKeyPressTimestamp) {
+                lastKeyPressTimestamp = state.lastKeyPress.timestamp;
+                const keyInfo = state.lastKeyPress;
+                console.log(`🔑 [HMI-C] Received key from global listener: ${keyInfo.key} (code: ${keyInfo.code})`);
+                
+                // Process the key press on the remote page
+                processRemoteKeyPress(keyInfo, state);
+              }
+              
+              // Stream audio if new audio path is available
+              if (state.audioPath && state.audioPath !== lastAudioPath) {
+                lastAudioPath = state.audioPath;
+                playRemoteAudio(state.audioPath);
+              }
+              
+              // On main app, execute commands directly
+              if (state.pendingRemoteCommand && !isRemoteDevice) {
+                const cmd = state.pendingRemoteCommand;
+                console.log(`🔗 [HMI-C] Received remote command from server:`, cmd);
+                
+                if (cmd.action === 'play-arrival-announcement') {
+                  console.log(`📢 [HMI-C] Executing arrival announcement command`);
+                  if (typeof playArrivalAnnouncement === 'function') {
+                    playArrivalAnnouncement();
+                  } else {
+                    console.warn(`⚠️ [HMI-C] playArrivalAnnouncement function not available`);
+                  }
+                }
+              }
+            }
+          } catch (err) {
+            console.error('State polling error:', err);
+          }
+        }, 300);
+      }
+      
+      // Process key press received from global listener
+      function processRemoteKeyPress(keyInfo, state) {
+        const { key, keyCode, code } = keyInfo;
+        console.log(`⌨️ [HMI-C] Processing remote key: ${key} (${code})`);
+        
+        // Map keys to actions
+        switch(key) {
+          case '3':
+            console.log(`🔑 [HMI-C] Key 3 - Door Unlock`);
+            if (typeof doorsUnlock === 'function') {
+              doorsUnlock();
+            }
+            break;
+            
+          case '4':
+            console.log(`🔑 [HMI-C] Key 4 - Arrival Announcement`);
+            if (typeof playArrivalAnnouncement === 'function') {
+              playArrivalAnnouncement();
+            }
+            break;
+            
+          case '6':
+            console.log(`🔑 [HMI-C] Key 6 - Door Lock`);
+            if (typeof doorsLock === 'function') {
+              doorsLock();
+            }
+            break;
+            
+          default:
+            console.log(`🔑 [HMI-C] Unmapped key: ${key}`);
+        }
+      }
+      
+      // Function to play audio from host
+      function playRemoteAudio(audioPath) {
+        console.log('📻 Playing audio from host:', audioPath);
+        
+        // Create audio element
+        const audio = new Audio();
+        audio.volume = 0.5; // Default volume
+        
+        // Stream audio from the host via /api/audio endpoint
+        audio.src = './' + audioPath.replace(/^\/+/, '').split('/').map(encodeURIComponent).join('/');
+        
+        // Add event listeners
+        audio.addEventListener('error', (e) => {
+          console.error('❌ Audio playback error:', e);
+        });
+        
+        audio.addEventListener('playing', () => {
+          console.log('▶️ Audio playing');
+        });
+        
+        audio.addEventListener('ended', () => {
+          console.log('⏹️ Audio finished');
+        });
+        
+        // Start playing
+        audio.play().catch(err => {
+          console.error('❌ Error playing audio:', err);
+        });
+      }
+      
+      // Setup command sync for buttons and keyboard
+      function setupRemoteCommandSync() {
+        // Remote command sync disabled - app now runs locally in Electron
+        console.log('✓ Local mode - no remote sync needed');
+      }
+      
+      // Initialize when DOM is ready
+      document.addEventListener('DOMContentLoaded', () => {
+        startStatePolling();
+        setupRemoteCommandSync();
+        console.log('✓ Remote device sync initialized');
+      });
+    } else {
+      console.log('🖥️ Running in Electron - normal mode');
+    }
+  </script>
+
+
+
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(reg => { reg.update().catch(() => null); }).catch(err => console.warn('Service worker not registered:', err));
+      });
+    }
+  </script>
+  <script src="app.js"></script>
+  <script>
+    // Hide loading screen once app is ready
+    document.addEventListener('DOMContentLoaded', hideLoadingScreen);
+    // Also call it after a short delay as fallback
+    setTimeout(hideLoadingScreen, 100);
+  </script>
+</body>
+</html>
