@@ -1,0 +1,6 @@
+node_modules/
+dist/
+build/
+out/
+SEQ_GTFS/stop_times.txt
+*.log
