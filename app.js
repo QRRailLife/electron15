@@ -2187,20 +2187,52 @@ function validateRunNumber(run) {
 let gtfsPatterns = null;
 const loadGTFSPatterns = async () => {
   try {
-    console.log('🔄 Starting GTFS data load from SEQ_GTFS files...');
-    
-    // Load from SEQ_GTFS CSV files
+    console.log('🔄 Starting GTFS data load from prepared JSON patterns...');
+
+    // iPhone/GitHub Pages cannot use the huge SEQ_GTFS/stop_times.txt file.
+    // Load the smaller prepared JSON first instead.
+    const jsonCandidates = [
+      '2gtfs-patterns.json',
+      'gtfs-patterns.json',
+      '../2gtfs-patterns.json',
+      '../gtfs-patterns.json'
+    ];
+
+    for (const candidate of jsonCandidates) {
+      try {
+        const url = candidate.startsWith('../') ? candidate : qvasAssetUrl(candidate);
+        console.log(`📄 Trying GTFS JSON: ${url}`);
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) {
+          console.log(`   ⚠️ ${url} failed with ${response.status}`);
+          continue;
+        }
+
+        const gtfsData = await response.json();
+        if (gtfsData && gtfsData.routes && gtfsData.tripIdMap) {
+          gtfsData.loadTime = new Date().toLocaleTimeString();
+          gtfsData.totalRoutes = gtfsData.totalRoutes || Object.keys(gtfsData.routes).length;
+          console.log(`✅ Loaded GTFS JSON from ${url}`);
+          console.log(`✅ Loaded ${gtfsData.totalRoutes} routes and ${Object.keys(gtfsData.tripIdMap).length} trip mappings`);
+          return gtfsData;
+        }
+      } catch (jsonErr) {
+        console.log(`   ⚠️ Could not load ${candidate}:`, jsonErr.message);
+      }
+    }
+
+    console.log('⚠️ Prepared GTFS JSON not found, trying SEQ_GTFS CSV fallback...');
     const gtfsData = await loadSEQGTFSFromFiles();
-    
+
     if (!gtfsData) {
-      console.log('❌ Failed to load SEQ_GTFS files - using hardcoded patterns only');
+      console.log('❌ Failed to load GTFS - using hardcoded patterns only');
       return null;
     }
-    
+
     console.log(`✅ Successfully loaded GTFS data from SEQ_GTFS files`);
     console.log(`✅ Loaded ${gtfsData.totalRoutes} routes and ${Object.keys(gtfsData.tripIdMap).length} trip mappings`);
     console.log(`📊 Load completed at ${gtfsData.loadTime}`);
-    
+
     return gtfsData;
   } catch (error) {
     console.error('❌ Error loading GTFS patterns:', error.message);
