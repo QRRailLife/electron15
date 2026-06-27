@@ -1149,8 +1149,8 @@ function startAnnouncementLoop(audioPath, displayText, announcementType) {
 // Door sound files for Key 3 (open beep) and Key 6 (doors closing)
 // Put your real MP3 files in: QR_PIDS_AudioFiles/Door Sounds/
 const doorSoundPaths = {
-  ngrOpen: 'QR_PIDS_AudioFiles/Door Sounds/NGR opening beep.mp3',
-  oldOpen: 'QR_PIDS_AudioFiles/Door Sounds/Older opening beep.mp3',
+  ngrOpen: 'QR_PIDS_AudioFiles/Door Sounds/NGR opening beep.MP3',
+  oldOpen: 'QR_PIDS_AudioFiles/Door Sounds/Older opening beep.MP3',
   ngrClose: 'QR_PIDS_AudioFiles/Door Sounds/NGR doors closing.mp3',
   oldClose: 'QR_PIDS_AudioFiles/Door Sounds/Older doors closing.mp3'
 };
