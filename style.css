@@ -1783,69 +1783,60 @@ body {
 }
 
 
-/* QVAS iPhone full-screen fit patch
-   Keeps the same QVAS interface, but scales the entire desktop-style panel to fit the phone. */
-html.qvas-fit-enabled,
-html.qvas-fit-enabled body {
+/* iPhone fit-to-screen patch
+   This keeps the original QVAS layout and scales the whole interface on small screens. */
+html.qvas-small-screen, html.qvas-small-screen body {
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden !important;
+  overflow: hidden;
   background: #000;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   overscroll-behavior: none;
-  touch-action: manipulation;
-}
-
-html.qvas-fit-enabled body {
-  position: fixed;
-  inset: 0;
-  display: block;
 }
 
 #qvas-fit-root {
+  width: 100%;
+  height: 100vh;
   min-height: 0;
 }
 
-html.qvas-fit-enabled #qvas-fit-root {
-  position: fixed;
-  left: 0;
-  top: 0;
+html.qvas-small-screen #qvas-fit-root {
   width: var(--qvas-design-width, 1024px);
-  height: var(--qvas-design-height, 480px);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: #222;
+  height: var(--qvas-design-height, 720px);
+  transform: scale(var(--qvas-fit-scale, 1));
   transform-origin: top left;
-  transform: translate(var(--qvas-fit-x, 0px), var(--qvas-fit-y, 0px)) scale(var(--qvas-fit-scale, 1));
+  overflow: hidden;
 }
 
-html.qvas-fit-enabled .header,
-html.qvas-fit-enabled .header-row-2,
-html.qvas-fit-enabled .main-panel {
+html.qvas-small-screen body {
+  position: fixed;
+  inset: 0;
+}
+
+html.qvas-small-screen .header,
+html.qvas-small-screen .header-row-2,
+html.qvas-small-screen .main-panel {
   width: var(--qvas-design-width, 1024px);
   box-sizing: border-box;
-  flex-shrink: 0;
 }
 
-html.qvas-fit-enabled .main-panel {
-  flex: 1 1 auto;
-  min-height: 0;
-  height: auto !important;
+html.qvas-small-screen .main-panel {
+  height: calc(var(--qvas-design-height, 720px) - 80px);
 }
 
-html.qvas-fit-enabled .left-panel,
-html.qvas-fit-enabled .right-panel {
-  min-height: 0;
-}
-
-html.qvas-fit-enabled .iphone-action-pad {
+/* Keep the new iPhone action buttons usable after the main screen is scaled. */
+html.qvas-small-screen .iphone-action-pad {
   position: fixed;
-  right: calc(8px / var(--qvas-fit-scale, 1));
-  bottom: calc(8px / var(--qvas-fit-scale, 1));
+  right: calc(10px / var(--qvas-fit-scale, 1));
+  bottom: calc(10px / var(--qvas-fit-scale, 1));
+}
+
+@supports (padding: max(0px)) {
+  html.qvas-small-screen body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
 
 
