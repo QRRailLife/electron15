@@ -126,7 +126,8 @@
   </script>
 
   <script>
-    // iPhone fit-to-screen helper. Keeps the exact same QVAS layout, just scales it down on small screens.
+    // QVAS iPhone full-screen fit helper.
+    // Keeps the same QVAS layout, but scales the whole interface to the visible screen.
     (function () {
       function isQvasCoreNode(el) {
         if (!el || el.nodeType !== 1) return false;
@@ -150,27 +151,52 @@
         return root;
       }
 
+      function viewportSize() {
+        const vv = window.visualViewport;
+        return {
+          width: Math.max(1, vv ? vv.width : (window.innerWidth || document.documentElement.clientWidth || 1024)),
+          height: Math.max(1, vv ? vv.height : (window.innerHeight || document.documentElement.clientHeight || 480))
+        };
+      }
+
       function fitQvasToScreen() {
         const root = ensureQvasFitRoot();
+        const viewport = viewportSize();
+        const isSmall = viewport.width < 950 || viewport.height < 650;
+
+        // 1024 x 480 is the compact QVAS canvas used on iPhone landscape.
+        // It keeps the same layout but lets the whole panel fit on the phone screen.
         const designWidth = 1024;
-        const designHeight = 720;
-        const viewportWidth = window.innerWidth || document.documentElement.clientWidth || designWidth;
-        const viewportHeight = window.innerHeight || document.documentElement.clientHeight || designHeight;
-        const scale = Math.min(viewportWidth / designWidth, viewportHeight / designHeight, 1);
-        document.documentElement.style.setProperty('--qvas-fit-scale', String(scale));
+        const designHeight = isSmall ? 480 : 720;
+        const scale = Math.min(viewport.width / designWidth, viewport.height / designHeight);
+        const offsetX = Math.max(0, (viewport.width - designWidth * scale) / 2);
+        const offsetY = Math.max(0, (viewport.height - designHeight * scale) / 2);
+
+        document.documentElement.classList.toggle('qvas-fit-enabled', isSmall);
         document.documentElement.style.setProperty('--qvas-design-width', designWidth + 'px');
         document.documentElement.style.setProperty('--qvas-design-height', designHeight + 'px');
-        document.documentElement.classList.toggle('qvas-small-screen', viewportWidth < 900 || viewportHeight < 650);
+        document.documentElement.style.setProperty('--qvas-fit-scale', String(scale));
+        document.documentElement.style.setProperty('--qvas-fit-x', offsetX + 'px');
+        document.documentElement.style.setProperty('--qvas-fit-y', offsetY + 'px');
+
+        root.style.setProperty('--qvas-design-width', designWidth + 'px');
+        root.style.setProperty('--qvas-design-height', designHeight + 'px');
         root.style.setProperty('--qvas-fit-scale', String(scale));
+        root.style.setProperty('--qvas-fit-x', offsetX + 'px');
+        root.style.setProperty('--qvas-fit-y', offsetY + 'px');
       }
 
       document.addEventListener('DOMContentLoaded', () => {
         ensureQvasFitRoot();
         fitQvasToScreen();
         setTimeout(fitQvasToScreen, 250);
+        setTimeout(fitQvasToScreen, 1000);
       });
       window.addEventListener('resize', fitQvasToScreen);
-      window.addEventListener('orientationchange', () => setTimeout(fitQvasToScreen, 300));
+      window.addEventListener('orientationchange', () => setTimeout(fitQvasToScreen, 350));
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', fitQvasToScreen);
+      }
     })();
   </script>
 
